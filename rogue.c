@@ -98,9 +98,14 @@ int main() {
   load_room("room7.txt", &m[7]);
   load_room("room8.txt", &m[8]);
 
-
   while (1) {
     clear();
+
+    mvprintw(ROOM_HEIGHT, 0,  "# Aventurier:");
+    mvprintw(ROOM_HEIGHT, 30, "# Pos: %d/%d", p.pos.x + 1,p.pos.y + 1); 
+    mvprintw(ROOM_HEIGHT, 45, "# Salle: %d", current_room);
+    mvprintw(ROOM_HEIGHT, 59, "#");
+    mvprintw(ROOM_HEIGHT + 1, 0, "############################################################");
 
     draw_room(&m[current_room]);
     draw_player(&p);
