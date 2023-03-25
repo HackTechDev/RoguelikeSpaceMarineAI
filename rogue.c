@@ -79,7 +79,7 @@ int main() {
   noecho();
   curs_set(0);
 
-  room m[2];
+  room m[4];
   player p = {{10, 10}, '@'};
 
   int current_room = 0;
