@@ -28,6 +28,7 @@ typedef struct {
 typedef struct {
   position pos;
   char symbol;
+  char name[20];
 } player;
 
 void load_room(const char* filename, room* m) {
@@ -83,6 +84,16 @@ int main() {
   noecho();
   curs_set(0);
 
+  player p = {{10, 10}, '@', ""};
+  char name[50];
+
+     // Welcome Screen
+    printw("Welcome to the game!\n\n");
+    printw("Please enter your name: ");
+    refresh();
+    echo();
+    getstr(p.name);
+    noecho();
 
 
     int choice = 0;
@@ -108,7 +119,6 @@ int main() {
 
 
   room m[9];
-  player p = {{10, 10}, '@'};
 
   int current_room = 0;
 
@@ -125,7 +135,7 @@ int main() {
   while (1) {
     clear();
 
-    mvprintw(ROOM_HEIGHT, 0,  "# Aventurier:");
+    mvprintw(ROOM_HEIGHT, 0,  "# Aventurier: %s", p.name);
     mvprintw(ROOM_HEIGHT, 30, "# Pos: %d/%d", p.pos.x + 1,p.pos.y + 1); 
     mvprintw(ROOM_HEIGHT, 45, "# Salle: %d", current_room);
     mvprintw(ROOM_HEIGHT, 59, "#");
