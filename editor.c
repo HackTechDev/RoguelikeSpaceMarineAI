@@ -4,6 +4,36 @@
 
 #define ROOM_WIDTH 60
 #define ROOM_HEIGHT 20
+#define MAX_ROOM_SIZE 1024
+
+char room[ROOM_HEIGHT][ROOM_WIDTH];
+
+void load_room(const char* filename) {
+  FILE* fp;
+  char buffer[MAX_ROOM_SIZE];
+
+  fp = fopen(filename, "r");
+  if (fp == NULL) {
+    fprintf(stderr, "Failed to open room file: %s\n", filename);
+    exit(1);
+  }
+
+  int i = 0;
+  while (fgets(buffer, MAX_ROOM_SIZE, fp)) {
+    if (i >= ROOM_HEIGHT) {
+      fprintf(stderr, "Map file has too many lines\n");
+      exit(1);
+    }
+    if (strlen(buffer) - 1 != ROOM_WIDTH) {
+      fprintf(stderr, "Map file has incorrect line length\n");
+      exit(1);
+    }
+    strncpy(room[i], buffer, ROOM_WIDTH);
+    i++;
+  }
+
+  fclose(fp);
+}
 
 int main() {
   // Initialize curses
@@ -14,8 +44,11 @@ int main() {
   curs_set(0);
 
   // Allocate memory for the room
-  char room[ROOM_HEIGHT][ROOM_WIDTH];
+  
   memset(room, ' ', sizeof(room));
+
+
+  load_room("room.txt"); 
 
   // Draw the initial room
   for (int y = 0; y < ROOM_HEIGHT; y++) {
