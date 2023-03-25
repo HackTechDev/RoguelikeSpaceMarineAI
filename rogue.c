@@ -83,6 +83,30 @@ int main() {
   noecho();
   curs_set(0);
 
+
+
+    int choice = 0;
+    while (1) {
+        clear();
+
+        printw("Roguelike\n\n");
+        printw("1. Partons à l'aventure !!\n");
+        printw("2. Quitter\n");
+        refresh();
+
+        choice = getch() - '0';
+
+        if (choice == 1) {
+            break;
+        } else if (choice == 2) {
+            endwin();
+            return 0;
+        }
+    }
+
+
+
+
   room m[9];
   player p = {{10, 10}, '@'};
 
