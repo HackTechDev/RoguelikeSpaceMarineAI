@@ -58,7 +58,7 @@ int main() {
   }
 
   // Draw the instructions
-  mvprintw(ROOM_HEIGHT + 1, 0, "Press arrow keys to move, 'w' to add a wall, and 's' to save and exit.");
+  mvprintw(ROOM_HEIGHT + 1, 0, "Arrow: Move, 'w' : Add a wall, 's' : Save room, 'l' : Load room, 'q' : exit");
 
   // Initialize the cursor position
   int cursor_x = 0;
