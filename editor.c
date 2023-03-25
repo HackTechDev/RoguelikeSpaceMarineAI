@@ -108,6 +108,11 @@ int main() {
         room[cursor_y][cursor_x] = '*';
         mvaddch(cursor_y, cursor_x, '*');
         break;
+      case 'q':
+      	// Exit the program
+        endwin();
+        return 0;  
+        break;
       case 's':
         // Save the room to a file
         FILE *file = fopen("room.txt", "w");
@@ -116,9 +121,6 @@ int main() {
           fwrite("\n", sizeof(char), 1, file);
         }
         fclose(file);
-        // Exit the program
-        endwin();
-        return 0;
         break;
     }
   }
