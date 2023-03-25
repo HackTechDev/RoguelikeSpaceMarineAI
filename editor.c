@@ -44,7 +44,7 @@ int main() {
   curs_set(0);
 
   // Allocate memory for the room
-  
+
   memset(room, ' ', sizeof(room));
 
 
@@ -109,9 +109,28 @@ int main() {
         mvaddch(cursor_y, cursor_x, '*');
         break;
       case 'q':
-      	// Exit the program
+        // Exit the program
         endwin();
         return 0;  
+        break;
+      case 'l':
+        char filename[256];
+        echo();
+        mvprintw(ROOM_HEIGHT + 2, 0, "Enter filename to load: ");
+        getstr(filename);
+        noecho();
+        // Load the room from a file
+        load_room(filename);
+        // Redraw the room on the screen
+        for (int y = 0; y < ROOM_HEIGHT; y++) {
+          for (int x = 0; x < ROOM_WIDTH; x++) {
+            mvaddch(y, x, room[y][x]);
+          }
+        }
+        // Move the cursor back to its original position
+        cursor_x = 0;
+        cursor_y = 0;
+        mvaddch(cursor_y, cursor_x, '#');
         break;
       case 's':
         // Save the room to a file
