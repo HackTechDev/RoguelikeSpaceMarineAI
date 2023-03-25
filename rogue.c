@@ -88,8 +88,8 @@ int main() {
   char name[50];
 
      // Welcome Screen
-    printw("Welcome to the game!\n\n");
-    printw("Please enter your name: ");
+    printw("Roguelike\n\n");
+    printw("Quel est ton nom, aventurier ? ");
     refresh();
     echo();
     getstr(p.name);
