@@ -8,6 +8,9 @@
 #define MAX_ROOM_SIZE 1024
 #define MAX_OBJECTS 10
 
+#define MAP_WIDTH 3
+#define MAP_HEIGHT 3
+
 typedef struct {
   int x;
   int y;
@@ -72,6 +75,7 @@ void draw_player(player* p) {
   mvaddch(p->pos.y, p->pos.x, p->symbol);
 }
 
+
 int main() {
   initscr();
   raw();
@@ -79,7 +83,7 @@ int main() {
   noecho();
   curs_set(0);
 
-  room m[4];
+  room m[9];
   player p = {{10, 10}, '@'};
 
   int current_room = 0;
@@ -88,6 +92,12 @@ int main() {
   load_room("room1.txt", &m[1]);
   load_room("room2.txt", &m[2]);
   load_room("room3.txt", &m[3]);
+  load_room("room4.txt", &m[4]);
+  load_room("room5.txt", &m[5]);
+  load_room("room6.txt", &m[6]);
+  load_room("room7.txt", &m[7]);
+  load_room("room8.txt", &m[8]);
+
 
   while (1) {
     clear();
@@ -98,8 +108,8 @@ int main() {
     int ch = getch();
     switch (ch) {
       case KEY_UP:
-        if ( p.pos.y == 0 && current_room == 2) {
-          current_room = 0;
+        if ( p.pos.y == 0) {
+          current_room = current_room - MAP_WIDTH;
           p.pos.y = ROOM_HEIGHT - 1;
         }
 
@@ -117,8 +127,8 @@ int main() {
         }
         break;
       case KEY_DOWN:
-        if (p.pos.y == ROOM_HEIGHT - 1 && current_room == 0) {
-          current_room = 2;
+        if (p.pos.y == ROOM_HEIGHT - 1) {
+          current_room = current_room + MAP_WIDTH;
           p.pos.y = 0;
         }
 
@@ -137,8 +147,8 @@ int main() {
         break;
       case KEY_LEFT:
 
-        if ( p.pos.x == 0 && current_room == 1) {
-          current_room = 0;
+        if ( p.pos.x == 0) {
+          current_room = current_room - 1;
           p.pos.x = ROOM_WIDTH - 1;
         }
 
@@ -156,8 +166,8 @@ int main() {
         }
         break;
       case KEY_RIGHT:
-        if (p.pos.x == ROOM_WIDTH - 1 && current_room == 0) {
-          current_room = 1;
+        if (p.pos.x == ROOM_WIDTH - 1) {
+          current_room = current_room + 1;
           p.pos.x = 0;
         }
         if (p.pos.x < ROOM_WIDTH - 1 && m[current_room].data[p.pos.y][p.pos.x + 1] != '#') {
