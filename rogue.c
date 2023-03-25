@@ -3,9 +3,9 @@
 #include <curses.h>
 #include <string.h>
 
-#define MAP_WIDTH 60
-#define MAP_HEIGHT 20
-#define MAX_MAP_SIZE 1024
+#define ROOM_WIDTH 60
+#define ROOM_HEIGHT 20
+#define MAX_ROOM_SIZE 1024
 #define MAX_OBJECTS 10
 
 typedef struct {
@@ -14,7 +14,7 @@ typedef struct {
 } position;
 
 typedef struct {
-  char data[MAP_HEIGHT][MAP_WIDTH];
+  char data[ROOM_HEIGHT][ROOM_WIDTH];
   int num_objects;
   struct object {
     position pos;
@@ -29,7 +29,7 @@ typedef struct {
 
 void load_room(const char* filename, room* m) {
   FILE* fp;
-  char buffer[MAX_MAP_SIZE];
+  char buffer[MAX_ROOM_SIZE];
 
   fp = fopen(filename, "r");
   if (fp == NULL) {
@@ -38,16 +38,16 @@ void load_room(const char* filename, room* m) {
   }
 
   int i = 0;
-  while (fgets(buffer, MAX_MAP_SIZE, fp)) {
-    if (i >= MAP_HEIGHT) {
+  while (fgets(buffer, MAX_ROOM_SIZE, fp)) {
+    if (i >= ROOM_HEIGHT) {
       fprintf(stderr, "Map file has too many lines\n");
       exit(1);
     }
-    if (strlen(buffer) - 1 != MAP_WIDTH) {
+    if (strlen(buffer) - 1 != ROOM_WIDTH) {
       fprintf(stderr, "Map file has incorrect line length\n");
       exit(1);
     }
-    strncpy(m->data[i], buffer, MAP_WIDTH);
+    strncpy(m->data[i], buffer, ROOM_WIDTH);
     i++;
   }
 
@@ -57,8 +57,8 @@ void load_room(const char* filename, room* m) {
 }
 
 void draw_room(room* m) {
-  for (int y = 0; y < MAP_HEIGHT; y++) {
-    for (int x = 0; x < MAP_WIDTH; x++) {
+  for (int y = 0; y < ROOM_HEIGHT; y++) {
+    for (int x = 0; x < ROOM_WIDTH; x++) {
       mvaddch(y, x, m->data[y][x]);
     }
   }
@@ -100,7 +100,7 @@ int main() {
       case KEY_UP:
         if ( p.pos.y == 0 && current_room == 2) {
           current_room = 0;
-          p.pos.y = MAP_HEIGHT - 1;
+          p.pos.y = ROOM_HEIGHT - 1;
         }
 
         if (p.pos.y > 0 && m[current_room].data[p.pos.y - 1][p.pos.x] != '#') {
@@ -117,14 +117,14 @@ int main() {
         }
         break;
       case KEY_DOWN:
-        if (p.pos.y == MAP_HEIGHT - 1 && current_room == 0) {
+        if (p.pos.y == ROOM_HEIGHT - 1 && current_room == 0) {
           current_room = 2;
           p.pos.y = 0;
         }
 
-        if (p.pos.y < MAP_HEIGHT - 1 && m[current_room].data[p.pos.y + 1][p.pos.x] != '#') {
+        if (p.pos.y < ROOM_HEIGHT - 1 && m[current_room].data[p.pos.y + 1][p.pos.x] != '#') {
           if (m[current_room].data[p.pos.y + 1][p.pos.x] == '*') {
-            if (p.pos.y < MAP_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#' && m[current_room].data[p.pos.y + 2][p.pos.x] != '*') {
+            if (p.pos.y < ROOM_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#' && m[current_room].data[p.pos.y + 2][p.pos.x] != '*') {
               m[current_room].data[p.pos.y + 2][p.pos.x] = '*';
               m[current_room].data[p.pos.y + 1][p.pos.x] = ' ';
               p.pos.y++;
@@ -139,7 +139,7 @@ int main() {
 
         if ( p.pos.x == 0 && current_room == 1) {
           current_room = 0;
-          p.pos.x = MAP_WIDTH - 1;
+          p.pos.x = ROOM_WIDTH - 1;
         }
 
         if (p.pos.x > 0 && m[current_room].data[p.pos.y][p.pos.x - 1] != '#') {
@@ -156,13 +156,13 @@ int main() {
         }
         break;
       case KEY_RIGHT:
-        if (p.pos.x == MAP_WIDTH - 1 && current_room == 0) {
+        if (p.pos.x == ROOM_WIDTH - 1 && current_room == 0) {
           current_room = 1;
           p.pos.x = 0;
         }
-        if (p.pos.x < MAP_WIDTH - 1 && m[current_room].data[p.pos.y][p.pos.x + 1] != '#') {
+        if (p.pos.x < ROOM_WIDTH - 1 && m[current_room].data[p.pos.y][p.pos.x + 1] != '#') {
           if (m[current_room].data[p.pos.y][p.pos.x + 1] == '*') {
-            if (p.pos.x < MAP_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#' && m[current_room].data[p.pos.y][p.pos.x + 2] != '*') {
+            if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#' && m[current_room].data[p.pos.y][p.pos.x + 2] != '*') {
               m[current_room].data[p.pos.y][p.pos.x + 2] = '*';
               m[current_room].data[p.pos.y][p.pos.x + 1] = ' ';
               p.pos.x++;
