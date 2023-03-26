@@ -194,7 +194,7 @@ int main() {
   while (1) {
     clear();
 
-    mvprintw(ROOM_HEIGHT, 0,  "# Aventurier: %s", p.name);
+    mvprintw(ROOM_HEIGHT, 0,  "# SpaceMarine: %s", p.name);
     mvprintw(ROOM_HEIGHT, 30, "# Pos: %d/%d", p.pos.x + 1,p.pos.y + 1); 
     mvprintw(ROOM_HEIGHT, 45, "# Salle: %d", current_room);
     mvprintw(ROOM_HEIGHT, 59, "#");
@@ -293,27 +293,107 @@ int main() {
         break;
     }
 
-    // Check if player is in combat with an enemy
-    if (check_for_enemy(&p, &e1)) {
-      combat(&p, &e1);
-      if (e1.hp <= 0) {
-        e1.pos.x = -1;
-        e1.pos.y = -1;
+
+    if (current_room == 0) {
+      int direction = rand() % 4;
+      switch (direction) {
+        case 0: // up
+          if (e1.pos.y > 0 && m[0].data[e1.pos.y - 1][e1.pos.x] != '#') {
+            e1.pos.y--;
+          }
+          break;
+        case 1: // down
+          if (e1.pos.y < MAP_HEIGHT - 1 && m[0].data[e1.pos.y + 1][e1.pos.x] != '#') {
+            e1.pos.y++;
+          }
+          break;
+        case 2: // left
+          if (e1.pos.x > 0 && m[0].data[e1.pos.y][e1.pos.x - 1] != '#') {
+            e1.pos.x--;
+          }
+          break;
+        case 3: // right
+          if (e1.pos.x < MAP_WIDTH - 1 && m[0].data[e1.pos.y][e1.pos.x + 1] != '#') {
+            e1.pos.x++;
+          }
+          break;
       }
-    } else if (check_for_enemy(&p, &e2)) {
-      combat(&p, &e2);
-      if (e2.hp <= 0) {
-        e2.pos.x = -1;
-        e2.pos.y = -1;
+
+
+      direction = rand() % 4;
+      switch (direction) {
+        case 0: // up
+          if (e2.pos.y > 0 && m[0].data[e1.pos.y - 1][e2.pos.x] != '#') {
+            e2.pos.y--;
+          }
+          break;
+        case 1: // down
+          if (e2.pos.y < MAP_HEIGHT - 1 && m[0].data[e2.pos.y + 1][e2.pos.x] != '#') {
+            e2.pos.y++;
+          }
+          break;
+        case 2: // left
+          if (e2.pos.x > 0 && m[0].data[e2.pos.y][e2.pos.x - 1] != '#') {
+            e2.pos.x--;
+          }
+          break;
+        case 3: // right
+          if (e2.pos.x < MAP_WIDTH - 1 && m[0].data[e2.pos.y][e2.pos.x + 1] != '#') {
+            e2.pos.x++;
+          }
+          break;
       }
-    } else if (check_for_enemy(&p, &e3)) {
-      combat(&p, &e3);
-      if (e3.hp <= 0) {
-        e3.pos.x = -1;
-        e3.pos.y = -1;
+
+
+      direction = rand() % 4;
+      switch (direction) {
+        case 0: // up
+          if (e3.pos.y > 0 && m[0].data[e3.pos.y - 1][e3.pos.x] != '#') {
+            e3.pos.y--;
+          }
+          break;
+        case 1: // down
+          if (e3.pos.y < MAP_HEIGHT - 1 && m[0].data[e3.pos.y + 1][e3.pos.x] != '#') {
+            e3.pos.y++;
+          }
+          break;
+        case 2: // left
+          if (e3.pos.x > 0 && m[0].data[e3.pos.y][e3.pos.x - 1] != '#') {
+            e3.pos.x--;
+          }
+          break;
+        case 3: // right
+          if (e3.pos.x < MAP_WIDTH - 1 && m[0].data[e3.pos.y][e3.pos.x + 1] != '#') {
+            e3.pos.x++;
+          }
+          break;
+      }
+
+
+
+
+
+      // Check if player is in combat with an enemy
+      if (check_for_enemy(&p, &e1)) {
+        combat(&p, &e1);
+        if (e1.hp <= 0) {
+          e1.pos.x = -1;
+          e1.pos.y = -1;
+        }
+      } else if (check_for_enemy(&p, &e2)) {
+        combat(&p, &e2);
+        if (e2.hp <= 0) {
+          e2.pos.x = -1;
+          e2.pos.y = -1;
+        }
+      } else if (check_for_enemy(&p, &e3)) {
+        combat(&p, &e3);
+        if (e3.hp <= 0) {
+          e3.pos.x = -1;
+          e3.pos.y = -1;
+        }
       }
     }
-
 
   }
 
