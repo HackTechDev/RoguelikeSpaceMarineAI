@@ -234,7 +234,7 @@ int main() {
   e[2].symbol = 'E';
   e[2].hp = ENEMY_HP;
   e[2].damage = ENEMY_DAMAGE;
-  e[2].room = 0;
+  e[2].room = 1;
 
   while (1) {
     clear();
