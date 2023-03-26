@@ -167,6 +167,8 @@ int main() {
   player p = {{10, 10}, '@', "", PLAYER_HP};
   char name[50];
 
+  bool no_enemies = true;
+
   // Welcome Screen
   printw("Roguelike\n\n");
   printw("Quel est ton nom, aventurier ? ");
@@ -262,8 +264,15 @@ int main() {
           p.pos.y = ROOM_HEIGHT - 1;
         }
 
-        if (p.pos.y > 0 && m[current_room].data[p.pos.y - 1][p.pos.x] != '#' && 
-            !check_for_enemy(&p, &e[0], current_room) && !check_for_enemy(&p, &e[1], current_room) && !check_for_enemy(&p, &e[2], current_room)) {
+        no_enemies = true;
+        for (int i = 0; i < MAX_ENEMIES; i++) {
+          if (check_for_enemy(&p, &e[i], current_room)) {
+              no_enemies = false;
+              break; 
+          }
+        }
+
+        if (p.pos.y > 0 && m[current_room].data[p.pos.y - 1][p.pos.x] != '#' && no_enemies) {
           if (m[current_room].data[p.pos.y - 1][p.pos.x] == '*') {
             if (p.pos.y > 1 && m[current_room].data[p.pos.y - 2][p.pos.x] != '#' && m[current_room].data[p.pos.y - 2][p.pos.x] != '*') {
               m[current_room].data[p.pos.y - 2][p.pos.x] = '*';
@@ -282,8 +291,15 @@ int main() {
           p.pos.y = 0;
         }
 
-        if (p.pos.y < ROOM_HEIGHT - 1 && m[current_room].data[p.pos.y + 1][p.pos.x] != '#' && 
-            !check_for_enemy(&p, &e[0], current_room) && !check_for_enemy(&p, &e[1], current_room) && !check_for_enemy(&p, &e[2], current_room)) {
+        no_enemies = true;
+        for (int i = 0; i < MAX_ENEMIES; i++) {
+          if (check_for_enemy(&p, &e[i], current_room)) {
+              no_enemies = false;
+              break; 
+          }
+        }
+
+        if (p.pos.y < ROOM_HEIGHT - 1 && m[current_room].data[p.pos.y + 1][p.pos.x] != '#' && no_enemies) {
           if (m[current_room].data[p.pos.y + 1][p.pos.x] == '*') {
             if (p.pos.y < ROOM_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#' && m[current_room].data[p.pos.y + 2][p.pos.x] != '*') {
               m[current_room].data[p.pos.y + 2][p.pos.x] = '*';
@@ -303,8 +319,15 @@ int main() {
           p.pos.x = ROOM_WIDTH - 1;
         }
 
-        if (p.pos.x > 0 && m[current_room].data[p.pos.y][p.pos.x - 1] != '#' && 
-            !check_for_enemy(&p, &e[0], current_room) && !check_for_enemy(&p, &e[1], current_room) && !check_for_enemy(&p, &e[2], current_room)) {
+        no_enemies = true;
+        for (int i = 0; i < MAX_ENEMIES; i++) {
+          if (check_for_enemy(&p, &e[i], current_room)) {
+              no_enemies = false;
+              break; 
+          }
+        }
+
+        if (p.pos.x > 0 && m[current_room].data[p.pos.y][p.pos.x - 1] != '#' && no_enemies) {
           if (m[current_room].data[p.pos.y][p.pos.x - 1] == '*') {
             if (p.pos.x > 1 && m[current_room].data[p.pos.y][p.pos.x - 2] != '#' && m[current_room].data[p.pos.y][p.pos.x - 2] != '*') {
               m[current_room].data[p.pos.y][p.pos.x - 2] = '*';
@@ -322,8 +345,16 @@ int main() {
           current_room = current_room + 1;
           p.pos.x = 0;
         }
-        if (p.pos.x < ROOM_WIDTH - 1 && m[current_room].data[p.pos.y][p.pos.x + 1] != '#' && 
-            !check_for_enemy(&p, &e[0], current_room) && !check_for_enemy(&p, &e[1], current_room) && !check_for_enemy(&p, &e[2], current_room)) {
+
+        no_enemies = true;
+        for (int i = 0; i < MAX_ENEMIES; i++) {
+          if (check_for_enemy(&p, &e[i], current_room)) {
+              no_enemies = false;
+              break; 
+          }
+        }
+
+        if (p.pos.x < ROOM_WIDTH - 1 && m[current_room].data[p.pos.y][p.pos.x + 1] != '#' && no_enemies) {
           if (m[current_room].data[p.pos.y][p.pos.x + 1] == '*') {
             if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#' && m[current_room].data[p.pos.y][p.pos.x + 2] != '*') {
               m[current_room].data[p.pos.y][p.pos.x + 2] = '*';
