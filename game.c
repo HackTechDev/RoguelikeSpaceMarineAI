@@ -193,6 +193,8 @@ int main() {
   player p;
   char name[50];
 
+  init_player_from_file("player.txt", &p);
+
   bool no_enemies = true;
 
   // Welcome Screen
@@ -229,8 +231,7 @@ int main() {
   room m[9];
   enemy e[3];
 
-  int current_room = 0;
-
+  
   load_room("room0.txt", &m[0]);
   load_room("room1.txt", &m[1]);
   load_room("room2.txt", &m[2]);
@@ -242,9 +243,10 @@ int main() {
   load_room("room8.txt", &m[8]);
 
 
-  // Initialize player and enemies
-  init_player_from_file("player.txt", &p);
-  init_enemies_from_file("enemies.txt", e, MAX_ENEMIES);
+  // Initialize enemies
+    init_enemies_from_file("enemies.txt", e, MAX_ENEMIES);
+
+  int current_room = p.room;
 
   while (1) {
     clear();
