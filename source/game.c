@@ -158,28 +158,28 @@ int check_for_enemy(player* p, enemy* e, int current_room) {
 }
 
 void init_player_from_file(const char* filename, player* p) {
-    FILE* fp;
-    fp = fopen(filename, "r");
-    if (fp == NULL) {
-        printf("Failed to open file: %s\n", filename);
-        exit(1);
-    }
-    fscanf(fp, "%d %d %c %s %d %d", &(p->pos.x), &(p->pos.y), &(p->symbol), p->name, &(p->hp), &(p->room));
-    fclose(fp);
+  FILE* fp;
+  fp = fopen(filename, "r");
+  if (fp == NULL) {
+    printf("Failed to open file: %s\n", filename);
+    exit(1);
+  }
+  fscanf(fp, "%d %d %c %s %d %d", &(p->pos.x), &(p->pos.y), &(p->symbol), p->name, &(p->hp), &(p->room));
+  fclose(fp);
 }
 
 
 void init_enemies_from_file(const char* filename, enemy* e, int num_enemies) {
-    FILE* fp;
-    fp = fopen(filename, "r");
-    if (fp == NULL) {
-        printf("Failed to open file: %s\n", filename);
-        exit(1);
-    }
-    for (int i = 0; i < num_enemies; i++) {
-        fscanf(fp, "%d %d %c %d %d %d", &e[i].pos.x, &e[i].pos.y, &e[i].symbol, &e[i].hp, &e[i].damage, &e[i].room);
-    }
-    fclose(fp);
+  FILE* fp;
+  fp = fopen(filename, "r");
+  if (fp == NULL) {
+    printf("Failed to open file: %s\n", filename);
+    exit(1);
+  }
+  for (int i = 0; i < num_enemies; i++) {
+    fscanf(fp, "%d %d %c %d %d %d", &e[i].pos.x, &e[i].pos.y, &e[i].symbol, &e[i].hp, &e[i].damage, &e[i].room);
+  }
+  fclose(fp);
 }
 
 
@@ -225,13 +225,9 @@ int main() {
     }
   }
 
-
-
-
   room m[9];
   enemy e[3];
 
-  
   load_room("rooms/room0.txt", &m[0]);
   load_room("rooms/room1.txt", &m[1]);
   load_room("rooms/room2.txt", &m[2]);
@@ -242,9 +238,8 @@ int main() {
   load_room("rooms/room7.txt", &m[7]);
   load_room("rooms/room8.txt", &m[8]);
 
-
   // Initialize enemies
-    init_enemies_from_file("enemies/enemies.txt", e, MAX_ENEMIES);
+  init_enemies_from_file("enemies/enemies.txt", e, MAX_ENEMIES);
 
   int current_room = p.room;
 
@@ -277,8 +272,8 @@ int main() {
         no_enemies = true;
         for (int i = 0; i < MAX_ENEMIES; i++) {
           if (check_for_enemy(&p, &e[i], current_room)) {
-              no_enemies = false;
-              break; 
+            no_enemies = false;
+            break; 
           }
         }
 
@@ -304,8 +299,8 @@ int main() {
         no_enemies = true;
         for (int i = 0; i < MAX_ENEMIES; i++) {
           if (check_for_enemy(&p, &e[i], current_room)) {
-              no_enemies = false;
-              break; 
+            no_enemies = false;
+            break; 
           }
         }
 
@@ -332,8 +327,8 @@ int main() {
         no_enemies = true;
         for (int i = 0; i < MAX_ENEMIES; i++) {
           if (check_for_enemy(&p, &e[i], current_room)) {
-              no_enemies = false;
-              break; 
+            no_enemies = false;
+            break; 
           }
         }
 
@@ -359,8 +354,8 @@ int main() {
         no_enemies = true;
         for (int i = 0; i < MAX_ENEMIES; i++) {
           if (check_for_enemy(&p, &e[i], current_room)) {
-              no_enemies = false;
-              break; 
+            no_enemies = false;
+            break; 
           }
         }
 
@@ -385,9 +380,9 @@ int main() {
 
 
     for (int i = 0; i < MAX_ENEMIES; i++) {
-        if (e[i].room == current_room) {
-          move_enemy(&e[i], &m[current_room]);
-        }
+      if (e[i].room == current_room) {
+        move_enemy(&e[i], &m[current_room]);
+      }
       if (check_for_enemy(&p, &e[i], current_room)) {
         combat(&p, &e[i]);
         if (e[i].hp <= 0) {
@@ -397,11 +392,8 @@ int main() {
       }   
     }
 
-
-
   }
 
   endwin();
   return 0;
 }
-
