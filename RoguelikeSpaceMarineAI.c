@@ -92,32 +92,32 @@ void draw_player(player* p) {
 }
 
 
-void draw_enemy(enemy* e, int i) {
-  mvaddch(e[i].pos.y, e[i].pos.x, e[i].symbol);
+void draw_enemy(enemy* e) {
+  mvaddch(e->pos.y, e->pos.x, e->symbol);
 }
 
 
-void move_enemy(enemy* e,int i, room* m) {
+void move_enemy(enemy* e, room* m) {
   int direction = rand() % 4;
   switch (direction) {
     case 0: // up
-      if (e[i].pos.y > 0 && m->data[e[i].pos.y - 1][e[i].pos.x] != '#') {
-        e[i].pos.y--;
+      if (e->pos.y > 0 && m->data[e->pos.y - 1][e->pos.x] != '#') {
+        e->pos.y--;
       }
       break;
     case 1: // down
-      if (e[i].pos.y < MAP_HEIGHT - 1 && m->data[e[i].pos.y + 1][e[i].pos.x] != '#') {
-        e[i].pos.y++;
+      if (e->pos.y < MAP_HEIGHT - 1 && m->data[e->pos.y + 1][e->pos.x] != '#') {
+        e->pos.y++;
       }
       break;
     case 2: // left
-      if (e[i].pos.x > 0 && m->data[e[i].pos.y][e[i].pos.x - 1] != '#') {
-        e[i].pos.x--;
+      if (e->pos.x > 0 && m->data[e->pos.y][e->pos.x - 1] != '#') {
+        e->pos.x--;
       }
       break;
     case 3: // right
-      if (e[i].pos.x < MAP_WIDTH - 1 && m->data[e[i].pos.y][e[i].pos.x + 1] != '#') {
-        e[i].pos.x++;
+      if (e->pos.x < MAP_WIDTH - 1 && m->data[e->pos.y][e->pos.x + 1] != '#') {
+        e->pos.x++;
       }
       break;
   }
@@ -198,6 +198,7 @@ int main() {
 
 
   room m[9];
+  enemy e[3];
 
   int current_room = 0;
 
@@ -213,9 +214,23 @@ int main() {
 
 
   // Initialize enemies
-  enemy e1 = {{20, 5}, 'E', ENEMY_HP, ENEMY_DAMAGE};
-  enemy e2 = {{40, 15}, 'E', ENEMY_HP, ENEMY_DAMAGE};
-  enemy e3 = {{5, 18}, 'E', ENEMY_HP, ENEMY_DAMAGE};
+  e[0].pos.x = 20;
+  e[0].pos.y = 5;
+  e[0].symbol = 'E';
+  e[0].hp = ENEMY_HP;
+  e[0].damage = ENEMY_DAMAGE;
+
+  e[1].pos.x = 40;
+  e[1].pos.y = 15;
+  e[1].symbol = 'E';
+  e[1].hp = ENEMY_HP;
+  e[1].damage = ENEMY_DAMAGE;
+
+  e[2].pos.x = 5;
+  e[2].pos.y = 18;
+  e[2].symbol = 'E';
+  e[2].hp = ENEMY_HP;
+  e[2].damage = ENEMY_DAMAGE;
 
 
   while (1) {
@@ -231,9 +246,9 @@ int main() {
     draw_player(&p);
 
     if (current_room == 0) {
-      draw_enemy(&e1, 0);
-      draw_enemy(&e2, 0);
-      draw_enemy(&e3, 0);
+      draw_enemy(&e[0]);
+      draw_enemy(&e[1]);
+      draw_enemy(&e[2]);
     }
 
     int ch = getch();
@@ -244,7 +259,7 @@ int main() {
           p.pos.y = ROOM_HEIGHT - 1;
         }
 
-        if (p.pos.y > 0 && m[current_room].data[p.pos.y - 1][p.pos.x] != '#' && !check_for_enemy(&p, &e1) && !check_for_enemy(&p, &e2) && !check_for_enemy(&p, &e3)) {
+        if (p.pos.y > 0 && m[current_room].data[p.pos.y - 1][p.pos.x] != '#' && !check_for_enemy(&p, &e[0]) && !check_for_enemy(&p, &e[1]) && !check_for_enemy(&p, &e[2])) {
           if (m[current_room].data[p.pos.y - 1][p.pos.x] == '*') {
             if (p.pos.y > 1 && m[current_room].data[p.pos.y - 2][p.pos.x] != '#' && m[current_room].data[p.pos.y - 2][p.pos.x] != '*') {
               m[current_room].data[p.pos.y - 2][p.pos.x] = '*';
@@ -263,7 +278,7 @@ int main() {
           p.pos.y = 0;
         }
 
-        if (p.pos.y < ROOM_HEIGHT - 1 && m[current_room].data[p.pos.y + 1][p.pos.x] != '#' && !check_for_enemy(&p, &e1) && !check_for_enemy(&p, &e2) && !check_for_enemy(&p, &e3)) {
+        if (p.pos.y < ROOM_HEIGHT - 1 && m[current_room].data[p.pos.y + 1][p.pos.x] != '#' && !check_for_enemy(&p, &e[0]) && !check_for_enemy(&p, &e[1]) && !check_for_enemy(&p, &e[2])) {
           if (m[current_room].data[p.pos.y + 1][p.pos.x] == '*') {
             if (p.pos.y < ROOM_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#' && m[current_room].data[p.pos.y + 2][p.pos.x] != '*') {
               m[current_room].data[p.pos.y + 2][p.pos.x] = '*';
@@ -283,7 +298,7 @@ int main() {
           p.pos.x = ROOM_WIDTH - 1;
         }
 
-        if (p.pos.x > 0 && m[current_room].data[p.pos.y][p.pos.x - 1] != '#' && !check_for_enemy(&p, &e1) && !check_for_enemy(&p, &e2) && !check_for_enemy(&p, &e3)) {
+        if (p.pos.x > 0 && m[current_room].data[p.pos.y][p.pos.x - 1] != '#' && !check_for_enemy(&p, &e[0]) && !check_for_enemy(&p, &e[1]) && !check_for_enemy(&p, &e[2])) {
           if (m[current_room].data[p.pos.y][p.pos.x - 1] == '*') {
             if (p.pos.x > 1 && m[current_room].data[p.pos.y][p.pos.x - 2] != '#' && m[current_room].data[p.pos.y][p.pos.x - 2] != '*') {
               m[current_room].data[p.pos.y][p.pos.x - 2] = '*';
@@ -301,7 +316,7 @@ int main() {
           current_room = current_room + 1;
           p.pos.x = 0;
         }
-        if (p.pos.x < ROOM_WIDTH - 1 && m[current_room].data[p.pos.y][p.pos.x + 1] != '#' && !check_for_enemy(&p, &e1) && !check_for_enemy(&p, &e2) && !check_for_enemy(&p, &e3)) {
+        if (p.pos.x < ROOM_WIDTH - 1 && m[current_room].data[p.pos.y][p.pos.x + 1] != '#' && !check_for_enemy(&p, &e[0]) && !check_for_enemy(&p, &e[1]) && !check_for_enemy(&p, &e[2])) {
           if (m[current_room].data[p.pos.y][p.pos.x + 1] == '*') {
             if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#' && m[current_room].data[p.pos.y][p.pos.x + 2] != '*') {
               m[current_room].data[p.pos.y][p.pos.x + 2] = '*';
@@ -323,29 +338,29 @@ int main() {
 
     if (current_room == 0) {
      
-	  move_enemy(&e1, 0, &m[0]);
-      move_enemy(&e2, 0, &m[0]);
-      move_enemy(&e3, 0, &m[0]);
+	  move_enemy(&e[0], &m[0]);
+      move_enemy(&e[1], &m[0]);
+      move_enemy(&e[2], &m[0]);
 	
 
       // Check if player is in combat with an enemy
-      if (check_for_enemy(&p, &e1)) {
-        combat(&p, &e1);
-        if (e1.hp <= 0) {
-          e1.pos.x = -1;
-          e1.pos.y = -1;
+      if (check_for_enemy(&p, &e[0])) {
+        combat(&p, &e[0]);
+        if (e[0].hp <= 0) {
+          e[0].pos.x = -1;
+          e[0].pos.y = -1;
         }
-      } else if (check_for_enemy(&p, &e2)) {
-        combat(&p, &e2);
-        if (e2.hp <= 0) {
-          e2.pos.x = -1;
-          e2.pos.y = -1;
+      } else if (check_for_enemy(&p, &e[1])) {
+        combat(&p, &e[1]);
+        if (e[1].hp <= 0) {
+          e[1].pos.x = -1;
+          e[1].pos.y = -1;
         }
-      } else if (check_for_enemy(&p, &e3)) {
-        combat(&p, &e3);
-        if (e3.hp <= 0) {
-          e3.pos.x = -1;
-          e3.pos.y = -1;
+      } else if (check_for_enemy(&p, &e[2])) {
+        combat(&p, &e[2]);
+        if (e[2].hp <= 0) {
+          e[2].pos.x = -1;
+          e[2].pos.y = -1;
         }
       }
     }
