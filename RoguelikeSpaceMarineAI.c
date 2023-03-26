@@ -184,8 +184,8 @@ int main() {
   bool no_enemies = true;
 
   // Welcome Screen
-  printw("Roguelike\n\n");
-  printw("Quel est ton nom, aventurier ? ");
+  printw("Roguelike SpaceMarine\n\n");
+  printw("Quel est votre identification, SpaceMarine ? ");
   refresh();
   echo();
   getstr(p.name);
@@ -196,8 +196,8 @@ int main() {
   while (1) {
     clear();
 
-    printw("Roguelike\n\n");
-    printw("1. Partons à l'aventure !!\n");
+    printw("Roguelike SpaceMarine\n\n");
+    printw("1. A la guerre !!\n");
     printw("2. Quitter\n");
     refresh();
 
