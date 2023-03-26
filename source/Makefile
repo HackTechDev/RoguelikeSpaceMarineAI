@@ -1,15 +1,15 @@
 CC = gcc
-TARGET1 = game
+TARGET1 = ../game
 OBJ1 = game.o
 SRC1 = game.c
 DEPS1 = $(OBJ1)
 
-TARGET2 = editor
+TARGET2 = ../editor
 OBJ2 = editor.o
 SRC2 = editor.c
 DEPS2 = $(OBJ2)
 
-TARGET3 = menu
+TARGET3 = ../menu
 OBJ3 = menu.o
 SRC3 = menu.c
 DEPS3 = $(OBJ3)
