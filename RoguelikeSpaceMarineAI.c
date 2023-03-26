@@ -156,6 +156,20 @@ int check_for_enemy(player* p, enemy* e, int current_room) {
   return 0;
 }
 
+void init_enemies_from_file(const char* filename, enemy* e, int num_enemies) {
+    FILE* fp;
+    fp = fopen(filename, "r");
+    if (fp == NULL) {
+        printf("Failed to open file: %s\n", filename);
+        exit(1);
+    }
+    for (int i = 0; i < num_enemies; i++) {
+        fscanf(fp, "%d %d %c %d %d %d", &e[i].pos.x, &e[i].pos.y,
+               &e[i].symbol, &e[i].hp, &e[i].damage, &e[i].room);
+    }
+    fclose(fp);
+}
+
 
 int main() {
   initscr();
@@ -217,26 +231,7 @@ int main() {
 
 
   // Initialize enemies
-  e[0].pos.x = 20;
-  e[0].pos.y = 5;
-  e[0].symbol = 'E';
-  e[0].hp = ENEMY_HP;
-  e[0].damage = ENEMY_DAMAGE;
-  e[0].room = 0;
-
-  e[1].pos.x = 40;
-  e[1].pos.y = 15;
-  e[1].symbol = 'E';
-  e[1].hp = ENEMY_HP;
-  e[1].damage = ENEMY_DAMAGE;
-  e[1].room = 0;
-
-  e[2].pos.x = 5;
-  e[2].pos.y = 18;
-  e[2].symbol = 'E';
-  e[2].hp = ENEMY_HP;
-  e[2].damage = ENEMY_DAMAGE;
-  e[2].room = 1;
+  init_enemies_from_file("enemies.txt", e, MAX_ENEMIES);
 
   while (1) {
     clear();
