@@ -193,7 +193,7 @@ int main() {
   player p;
   char name[50];
 
-  init_player_from_file("player.txt", &p);
+  init_player_from_file("player/player.txt", &p);
 
   bool no_enemies = true;
 
@@ -232,19 +232,19 @@ int main() {
   enemy e[3];
 
   
-  load_room("room0.txt", &m[0]);
-  load_room("room1.txt", &m[1]);
-  load_room("room2.txt", &m[2]);
-  load_room("room3.txt", &m[3]);
-  load_room("room4.txt", &m[4]);
-  load_room("room5.txt", &m[5]);
-  load_room("room6.txt", &m[6]);
-  load_room("room7.txt", &m[7]);
-  load_room("room8.txt", &m[8]);
+  load_room("rooms/room0.txt", &m[0]);
+  load_room("rooms/room1.txt", &m[1]);
+  load_room("rooms/room2.txt", &m[2]);
+  load_room("rooms/room3.txt", &m[3]);
+  load_room("rooms/room4.txt", &m[4]);
+  load_room("rooms/room5.txt", &m[5]);
+  load_room("rooms/room6.txt", &m[6]);
+  load_room("rooms/room7.txt", &m[7]);
+  load_room("rooms/room8.txt", &m[8]);
 
 
   // Initialize enemies
-    init_enemies_from_file("enemies.txt", e, MAX_ENEMIES);
+    init_enemies_from_file("enemies/enemies.txt", e, MAX_ENEMIES);
 
   int current_room = p.room;
 
