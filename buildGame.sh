@@ -1,3 +1,3 @@
 #!/bin/sh
 
-gcc -o RoguelikeSpaceMarineAI RoguelikeSpaceMarineAI.c -lncurses
+gcc -o game game.c -lncurses

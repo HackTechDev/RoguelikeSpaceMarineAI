@@ -12,8 +12,8 @@ char *choices[MAX_CHOICES] = {
 };
 
 char *commands[MAX_CHOICES] = {
-  "./RoguelikeSpaceMarineAI",
-  "./MapEditor",
+  "./game",
+  "./editor",
   ""
 };
 
