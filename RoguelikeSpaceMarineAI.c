@@ -8,7 +8,7 @@
 #define MAX_ROOM_SIZE 1024
 #define MAX_OBJECTS 10
 
-#define MAX_ENEMIES 10
+#define MAX_ENEMIES 3
 #define PLAYER_HP 20
 #define ENEMY_HP 10
 #define ENEMY_DAMAGE 8
@@ -43,6 +43,7 @@ typedef struct {
   char symbol;
   int hp;
   int damage;
+  int room;
 } enemy;
 
 
@@ -219,19 +220,21 @@ int main() {
   e[0].symbol = 'E';
   e[0].hp = ENEMY_HP;
   e[0].damage = ENEMY_DAMAGE;
+  e[0].room = 0;
 
   e[1].pos.x = 40;
   e[1].pos.y = 15;
   e[1].symbol = 'E';
   e[1].hp = ENEMY_HP;
   e[1].damage = ENEMY_DAMAGE;
+  e[1].room = 0;
 
   e[2].pos.x = 5;
   e[2].pos.y = 18;
   e[2].symbol = 'E';
   e[2].hp = ENEMY_HP;
   e[2].damage = ENEMY_DAMAGE;
-
+  e[2].room = 0;
 
   while (1) {
     clear();
@@ -245,10 +248,10 @@ int main() {
     draw_room(&m[current_room]);
     draw_player(&p);
 
-    if (current_room == 0) {
-      draw_enemy(&e[0]);
-      draw_enemy(&e[1]);
-      draw_enemy(&e[2]);
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+      if (e[i].room == current_room) {
+        draw_enemy(&e[i]);
+      }
     }
 
     int ch = getch();
@@ -336,34 +339,20 @@ int main() {
     }
 
 
-    if (current_room == 0) {
-     
-	  move_enemy(&e[0], &m[0]);
-      move_enemy(&e[1], &m[0]);
-      move_enemy(&e[2], &m[0]);
-	
-
-      // Check if player is in combat with an enemy
-      if (check_for_enemy(&p, &e[0])) {
-        combat(&p, &e[0]);
-        if (e[0].hp <= 0) {
-          e[0].pos.x = -1;
-          e[0].pos.y = -1;
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+        if (e[i].room == current_room) {
+          move_enemy(&e[i], &m[current_room]);
         }
-      } else if (check_for_enemy(&p, &e[1])) {
-        combat(&p, &e[1]);
-        if (e[1].hp <= 0) {
-          e[1].pos.x = -1;
-          e[1].pos.y = -1;
+       if (check_for_enemy(&p, &e[i])) {
+        combat(&p, &e[i]);
+        if (e[i].hp <= 0) {
+          e[i].pos.x = -1;
+          e[i].pos.y = -1;
         }
-      } else if (check_for_enemy(&p, &e[2])) {
-        combat(&p, &e[2]);
-        if (e[2].hp <= 0) {
-          e[2].pos.x = -1;
-          e[2].pos.y = -1;
-        }
-      }
+      }   
     }
+
+
 
   }
 
