@@ -96,6 +96,33 @@ void draw_enemy(enemy* e, int i) {
   mvaddch(e[i].pos.y, e[i].pos.x, e[i].symbol);
 }
 
+
+void move_enemy(enemy* e,int i, room* m) {
+  int direction = rand() % 4;
+  switch (direction) {
+    case 0: // up
+      if (e[i].pos.y > 0 && m->data[e[i].pos.y - 1][e[i].pos.x] != '#') {
+        e[i].pos.y--;
+      }
+      break;
+    case 1: // down
+      if (e[i].pos.y < MAP_HEIGHT - 1 && m->data[e[i].pos.y + 1][e[i].pos.x] != '#') {
+        e[i].pos.y++;
+      }
+      break;
+    case 2: // left
+      if (e[i].pos.x > 0 && m->data[e[i].pos.y][e[i].pos.x - 1] != '#') {
+        e[i].pos.x--;
+      }
+      break;
+    case 3: // right
+      if (e[i].pos.x < MAP_WIDTH - 1 && m->data[e[i].pos.y][e[i].pos.x + 1] != '#') {
+        e[i].pos.x++;
+      }
+      break;
+  }
+}
+
 int combat(player* p, enemy* e) {
   while (1) {
     clear();
@@ -295,83 +322,11 @@ int main() {
 
 
     if (current_room == 0) {
-      int direction = rand() % 4;
-      switch (direction) {
-        case 0: // up
-          if (e1.pos.y > 0 && m[0].data[e1.pos.y - 1][e1.pos.x] != '#') {
-            e1.pos.y--;
-          }
-          break;
-        case 1: // down
-          if (e1.pos.y < MAP_HEIGHT - 1 && m[0].data[e1.pos.y + 1][e1.pos.x] != '#') {
-            e1.pos.y++;
-          }
-          break;
-        case 2: // left
-          if (e1.pos.x > 0 && m[0].data[e1.pos.y][e1.pos.x - 1] != '#') {
-            e1.pos.x--;
-          }
-          break;
-        case 3: // right
-          if (e1.pos.x < MAP_WIDTH - 1 && m[0].data[e1.pos.y][e1.pos.x + 1] != '#') {
-            e1.pos.x++;
-          }
-          break;
-      }
-
-
-      direction = rand() % 4;
-      switch (direction) {
-        case 0: // up
-          if (e2.pos.y > 0 && m[0].data[e1.pos.y - 1][e2.pos.x] != '#') {
-            e2.pos.y--;
-          }
-          break;
-        case 1: // down
-          if (e2.pos.y < MAP_HEIGHT - 1 && m[0].data[e2.pos.y + 1][e2.pos.x] != '#') {
-            e2.pos.y++;
-          }
-          break;
-        case 2: // left
-          if (e2.pos.x > 0 && m[0].data[e2.pos.y][e2.pos.x - 1] != '#') {
-            e2.pos.x--;
-          }
-          break;
-        case 3: // right
-          if (e2.pos.x < MAP_WIDTH - 1 && m[0].data[e2.pos.y][e2.pos.x + 1] != '#') {
-            e2.pos.x++;
-          }
-          break;
-      }
-
-
-      direction = rand() % 4;
-      switch (direction) {
-        case 0: // up
-          if (e3.pos.y > 0 && m[0].data[e3.pos.y - 1][e3.pos.x] != '#') {
-            e3.pos.y--;
-          }
-          break;
-        case 1: // down
-          if (e3.pos.y < MAP_HEIGHT - 1 && m[0].data[e3.pos.y + 1][e3.pos.x] != '#') {
-            e3.pos.y++;
-          }
-          break;
-        case 2: // left
-          if (e3.pos.x > 0 && m[0].data[e3.pos.y][e3.pos.x - 1] != '#') {
-            e3.pos.x--;
-          }
-          break;
-        case 3: // right
-          if (e3.pos.x < MAP_WIDTH - 1 && m[0].data[e3.pos.y][e3.pos.x + 1] != '#') {
-            e3.pos.x++;
-          }
-          break;
-      }
-
-
-
-
+     
+	  move_enemy(&e1, 0, &m[0]);
+      move_enemy(&e2, 0, &m[0]);
+      move_enemy(&e3, 0, &m[0]);
+	
 
       // Check if player is in combat with an enemy
       if (check_for_enemy(&p, &e1)) {
