@@ -35,6 +35,7 @@ typedef struct {
   char symbol;
   char name[20];
   int hp;
+  int room;
 } player;
 
 
@@ -156,6 +157,18 @@ int check_for_enemy(player* p, enemy* e, int current_room) {
   return 0;
 }
 
+void init_player_from_file(const char* filename, player* p) {
+    FILE* fp;
+    fp = fopen(filename, "r");
+    if (fp == NULL) {
+        printf("Failed to open file: %s\n", filename);
+        exit(1);
+    }
+    fscanf(fp, "%d %d %c %s %d %d", &(p->pos.x), &(p->pos.y), &(p->symbol), p->name, &(p->hp), &(p->room));
+    fclose(fp);
+}
+
+
 void init_enemies_from_file(const char* filename, enemy* e, int num_enemies) {
     FILE* fp;
     fp = fopen(filename, "r");
@@ -164,8 +177,7 @@ void init_enemies_from_file(const char* filename, enemy* e, int num_enemies) {
         exit(1);
     }
     for (int i = 0; i < num_enemies; i++) {
-        fscanf(fp, "%d %d %c %d %d %d", &e[i].pos.x, &e[i].pos.y,
-               &e[i].symbol, &e[i].hp, &e[i].damage, &e[i].room);
+        fscanf(fp, "%d %d %c %d %d %d", &e[i].pos.x, &e[i].pos.y, &e[i].symbol, &e[i].hp, &e[i].damage, &e[i].room);
     }
     fclose(fp);
 }
@@ -178,7 +190,7 @@ int main() {
   noecho();
   curs_set(0);
 
-  player p = {{10, 10}, '@', "", PLAYER_HP};
+  player p;
   char name[50];
 
   bool no_enemies = true;
@@ -230,7 +242,8 @@ int main() {
   load_room("room8.txt", &m[8]);
 
 
-  // Initialize enemies
+  // Initialize player and enemies
+  init_player_from_file("player.txt", &p);
   init_enemies_from_file("enemies.txt", e, MAX_ENEMIES);
 
   while (1) {
