@@ -184,11 +184,33 @@ void init_enemies_from_file(const char* filename, enemy* e, int num_enemies) {
 
 
 int main() {
-  initscr();
+  WINDOW *mainwin, *game_win, *info_win, *side_win;
+  
+  int map_width = 60, map_height = 20;
+  int char_x = map_width / 2, char_y = map_height / 2;
+
+  if ((mainwin = initscr()) == NULL) {
+    fprintf(stderr, "Error initialising ncurses.\n");
+    exit(EXIT_FAILURE);
+  }
+  
   raw();
-  keypad(stdscr, TRUE);
+  keypad(mainwin, TRUE);
   noecho();
   curs_set(0);
+
+
+  game_win = subwin(mainwin, map_height+2, map_width+2, 0, 0);
+  box(game_win, 0, 0);
+  
+  info_win = subwin(mainwin, 6, map_width+2, map_height+2, 0);
+  box(info_win, 0, 0);
+  
+  side_win = subwin(mainwin, map_height+8, 30, 0, map_width+3);
+  box(side_win, 0, 0);
+  
+    
+
 
   player p;
   char name[50];
@@ -197,23 +219,28 @@ int main() {
 
   bool no_enemies = true;
 
-  // Welcome Screen
-  printw("Roguelike SpaceMarine\n\n");
-  printw("Quel est votre identification, SpaceMarine ? ");
-  refresh();
-  echo();
-  getstr(p.name);
-  noecho();
+  wrefresh(mainwin);
 
+  // Welcome Screen
+  mvwprintw(info_win, 1, 1, "Roguelike SpaceMarine");
+  mvwprintw(info_win, 2, 1, "Quel est votre identification, SpaceMarine ? ");
+  echo();
+  mvwgetstr(info_win, 3, 1, p.name);
+  //noecho();
+  wrefresh(info_win);
+  getch();
+
+
+  wrefresh(mainwin);
 
   int choice = 0;
   while (1) {
-    clear();
-
-    printw("Roguelike SpaceMarine\n\n");
-    printw("1. A la guerre !!\n");
-    printw("2. Quitter\n");
-    refresh();
+    wrefresh(info_win);
+    
+    mvwprintw(info_win, 1, 1, "Roguelike SpaceMarine");
+    mvwprintw(info_win, 2, 1, "1. A la guerre !!");
+    mvwprintw(info_win, 3, 1, "2. Quitter");
+    wrefresh(info_win);
 
     choice = getch() - '0';
 
@@ -246,11 +273,9 @@ int main() {
   while (1) {
     clear();
 
-    mvprintw(ROOM_HEIGHT, 0,  "# SpaceMarine: %s", p.name);
-    mvprintw(ROOM_HEIGHT, 30, "# Pos: %d/%d", p.pos.x + 1,p.pos.y + 1); 
-    mvprintw(ROOM_HEIGHT, 45, "# Salle: %d", current_room);
-    mvprintw(ROOM_HEIGHT, 59, "#");
-    mvprintw(ROOM_HEIGHT + 1, 0, "############################################################");
+    mvwprintw(info_win, 1, 1,  "SpaceMarine: %s", p.name);
+    mvwprintw(info_win, 2, 1, "Pos: %d/%d", p.pos.x + 1,p.pos.y + 1); 
+    mvwprintw(info_win, 3, 1, "Salle: %d", current_room);
 
     draw_room(&m[current_room]);
     draw_player(&p);
@@ -394,6 +419,9 @@ int main() {
 
   }
 
+  wrefresh(game_win);
+  wrefresh(side_win);
+  wrefresh(info_win);
   endwin();
   return 0;
 }
