@@ -77,25 +77,25 @@ void load_room(const char* filename, room* m) {
   fclose(fp);
 }
 
-void draw_room(room* m) {
+void draw_room(WINDOW *game_win, room* m) {
   for (int y = 0; y < ROOM_HEIGHT; y++) {
     for (int x = 0; x < ROOM_WIDTH; x++) {
-      mvaddch(y, x, m->data[y][x]);
+      mvwaddch(game_win, y, x, m->data[y][x]);
     }
   }
 
   for (int i = 0; i < m->num_objects; i++) {
-    mvaddch(m->objects[i].pos.y, m->objects[i].pos.x, m->objects[i].symbol);
+    mvwaddch(game_win, m->objects[i].pos.y, m->objects[i].pos.x, m->objects[i].symbol);
   }
 }
 
-void draw_player(player* p) {
-  mvaddch(p->pos.y, p->pos.x, p->symbol);
+void draw_player(WINDOW *game_win,player* p) {
+  mvwaddch(game_win, p->pos.y, p->pos.x, p->symbol);
 }
 
 
-void draw_enemy(enemy* e) {
-  mvaddch(e->pos.y, e->pos.x, e->symbol);
+void draw_enemy(WINDOW *game_win,enemy* e) {
+  mvwaddch(game_win, e->pos.y, e->pos.x, e->symbol);
 }
 
 
@@ -125,13 +125,12 @@ void move_enemy(enemy* e, room* m) {
   }
 }
 
-int combat(player* p, enemy* e) {
+int combat(WINDOW *game_win, player* p, enemy* e) {
   while (1) {
-    clear();
-    mvprintw(0, 0, "Combat phase!\n");
-    mvprintw(1, 0, "Player HP: %d\n", p->hp);
-    mvprintw(2, 0, "Enemy HP: %d\n", e->hp);
-    mvprintw(3, 0, "Press any key to attack!");
+    mvwprintw(game_win, 1, 1, "Combat phase!\n");
+    mvwprintw(game_win, 2, 1, "Player HP: %d\n", p->hp);
+    mvwprintw(game_win, 3, 1, "Enemy HP: %d\n", e->hp);
+    mvwprintw(game_win, 4, 1, "Press any key to attack!");
 
     int combat_ch = getch();
     int player_damage = rand() % 5 + 1;
@@ -146,7 +145,7 @@ int combat(player* p, enemy* e) {
         return -1;
       }
     }
-    refresh();
+    wrefresh(game_win);
   }
 }
 
@@ -185,6 +184,7 @@ void init_enemies_from_file(const char* filename, enemy* e, int num_enemies) {
 
 int main() {
   WINDOW *mainwin, *game_win, *info_win, *side_win;
+
   
   int map_width = 60, map_height = 20;
   int char_x = map_width / 2, char_y = map_height / 2;
@@ -251,7 +251,7 @@ int main() {
       return 0;
     }
   }
-
+  
   room m[9];
   enemy e[3];
 
@@ -271,20 +271,25 @@ int main() {
   int current_room = p.room;
 
   while (1) {
-    clear();
 
     mvwprintw(info_win, 1, 1,  "SpaceMarine: %s", p.name);
     mvwprintw(info_win, 2, 1, "Pos: %d/%d", p.pos.x + 1,p.pos.y + 1); 
     mvwprintw(info_win, 3, 1, "Salle: %d", current_room);
 
-    draw_room(&m[current_room]);
-    draw_player(&p);
+    wrefresh(info_win);
+
+    draw_room(game_win, &m[current_room]);
+    draw_player(game_win, &p);
+
 
     for (int i = 0; i < MAX_ENEMIES; i++) {
       if (e[i].room == current_room) {
-        draw_enemy(&e[i]);
+        draw_enemy(game_win, &e[i]);
       }
     }
+
+    wrefresh(game_win);
+
 
     int ch = getch();
     switch (ch) {
@@ -409,7 +414,7 @@ int main() {
         move_enemy(&e[i], &m[current_room]);
       }
       if (check_for_enemy(&p, &e[i], current_room)) {
-        combat(&p, &e[i]);
+        combat(game_win, &p, &e[i]);
         if (e[i].hp <= 0) {
           e[i].pos.x = -1;
           e[i].pos.y = -1;
