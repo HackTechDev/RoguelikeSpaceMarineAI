@@ -16,6 +16,9 @@
 #define MAP_WIDTH 3
 #define MAP_HEIGHT 3
 
+#define OFFSET_GAME_WIN_X 1
+#define OFFSET_GAME_WIN_Y 1
+
 typedef struct {
   int x;
   int y;
@@ -80,22 +83,22 @@ void load_room(const char* filename, room* m) {
 void draw_room(WINDOW *game_win, room* m) {
   for (int y = 0; y < ROOM_HEIGHT; y++) {
     for (int x = 0; x < ROOM_WIDTH; x++) {
-      mvwaddch(game_win, y, x, m->data[y][x]);
+      mvwaddch(game_win, OFFSET_GAME_WIN_Y + y, OFFSET_GAME_WIN_X + x, m->data[y][x]);
     }
   }
 
   for (int i = 0; i < m->num_objects; i++) {
-    mvwaddch(game_win, m->objects[i].pos.y, m->objects[i].pos.x, m->objects[i].symbol);
+    mvwaddch(game_win, OFFSET_GAME_WIN_Y + m->objects[i].pos.y, OFFSET_GAME_WIN_X + m->objects[i].pos.x, m->objects[i].symbol);
   }
 }
 
 void draw_player(WINDOW *game_win,player* p) {
-  mvwaddch(game_win, p->pos.y, p->pos.x, p->symbol);
+  mvwaddch(game_win, OFFSET_GAME_WIN_Y + p->pos.y, OFFSET_GAME_WIN_X + p->pos.x, p->symbol);
 }
 
 
 void draw_enemy(WINDOW *game_win,enemy* e) {
-  mvwaddch(game_win, e->pos.y, e->pos.x, e->symbol);
+  mvwaddch(game_win, OFFSET_GAME_WIN_Y + e->pos.y, OFFSET_GAME_WIN_X + e->pos.x, e->symbol);
 }
 
 
@@ -126,6 +129,7 @@ void move_enemy(enemy* e, room* m) {
 }
 
 int combat(WINDOW *game_win, player* p, enemy* e) {
+  noecho();
   while (1) {
     mvwprintw(game_win, 1, 1, "Combat phase!\n");
     mvwprintw(game_win, 2, 1, "Player HP: %d\n", p->hp);
@@ -241,7 +245,7 @@ int main() {
     mvwprintw(info_win, 2, 1, "1. A la guerre !!");
     mvwprintw(info_win, 3, 1, "2. Quitter");
     wrefresh(info_win);
-
+    noecho();
     choice = getch() - '0';
 
     if (choice == 1) {
@@ -416,8 +420,9 @@ int main() {
       if (check_for_enemy(&p, &e[i], current_room)) {
         combat(game_win, &p, &e[i]);
         if (e[i].hp <= 0) {
-          e[i].pos.x = -1;
-          e[i].pos.y = -1;
+          // Enemy display outside the screen
+          e[i].pos.x = -2;
+          e[i].pos.y = -2;
         }
       }   
     }
