@@ -186,6 +186,17 @@ void init_enemies_from_file(const char* filename, enemy* e, int num_enemies) {
 }
 
 
+void clear_window(WINDOW *win, int y, int x) {
+    int row, col;
+    for (row = 0; row < y; row++) {
+      for (col = 0; col < x; col++) {
+          mvwaddch(win, OFFSET_GAME_WIN_Y + row, OFFSET_GAME_WIN_Y + col, ' ');
+      }
+    }
+    wrefresh(win);
+}
+
+
 int main() {
   WINDOW *mainwin, *game_win, *info_win, *side_win;
 
@@ -234,8 +245,8 @@ int main() {
   wrefresh(info_win);
   getch();
 
-
-  wrefresh(mainwin);
+  clear_window(info_win, 3, 50);
+  wrefresh(info_win);
 
   int choice = 0;
   while (1) {
@@ -255,7 +266,10 @@ int main() {
       return 0;
     }
   }
-  
+ 
+  clear_window(info_win, 3, 50);
+  wrefresh(info_win);
+ 
   room m[9];
   enemy e[3];
 
