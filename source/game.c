@@ -187,20 +187,20 @@ void init_enemies_from_file(const char* filename, enemy* e, int num_enemies) {
 
 
 void clear_window(WINDOW *win, int y, int x) {
-    int row, col;
-    for (row = 0; row < y; row++) {
-      for (col = 0; col < x; col++) {
-          mvwaddch(win, OFFSET_GAME_WIN_Y + row, OFFSET_GAME_WIN_Y + col, ' ');
-      }
+  int row, col;
+  for (row = 0; row < y; row++) {
+    for (col = 0; col < x; col++) {
+      mvwaddch(win, OFFSET_GAME_WIN_Y + row, OFFSET_GAME_WIN_Y + col, ' ');
     }
-    wrefresh(win);
+  }
+  wrefresh(win);
 }
 
 
 int main() {
   WINDOW *mainwin, *game_win, *info_win, *side_win;
 
-  
+
   int map_width = 60, map_height = 20;
   int char_x = map_width / 2, char_y = map_height / 2;
 
@@ -208,7 +208,7 @@ int main() {
     fprintf(stderr, "Error initialising ncurses.\n");
     exit(EXIT_FAILURE);
   }
-  
+
   raw();
   keypad(mainwin, TRUE);
   noecho();
@@ -217,14 +217,14 @@ int main() {
 
   game_win = subwin(mainwin, map_height+2, map_width+2, 0, 0);
   box(game_win, 0, 0);
-  
+
   info_win = subwin(mainwin, 6, map_width+2, map_height+2, 0);
   box(info_win, 0, 0);
-  
+
   side_win = subwin(mainwin, map_height+8, 30, 0, map_width+3);
   box(side_win, 0, 0);
-  
-    
+
+
 
 
   player p;
@@ -251,7 +251,7 @@ int main() {
   int choice = 0;
   while (1) {
     wrefresh(info_win);
-    
+
     mvwprintw(info_win, 1, 1, "Roguelike SpaceMarine");
     mvwprintw(info_win, 2, 1, "1. A la guerre !!");
     mvwprintw(info_win, 3, 1, "2. Quitter");
@@ -266,10 +266,10 @@ int main() {
       return 0;
     }
   }
- 
+
   clear_window(info_win, 3, 50);
   wrefresh(info_win);
- 
+
   room m[9];
   enemy e[3];
 
@@ -325,24 +325,27 @@ int main() {
           }
         }
 
-        if (p.pos.y > 0 && (m[current_room].data[p.pos.y - 1][p.pos.x] != '#' || m[current_room].data[p.pos.y - 1][p.pos.x] != '1') && no_enemies) {
+
+        if (p.pos.y > 0 && no_enemies) {
           if (m[current_room].data[p.pos.y - 1][p.pos.x] == '*') {
-            if (p.pos.y > 1 && m[current_room].data[p.pos.y - 2][p.pos.x] != '#') {
+            if (p.pos.y > 1 && m[current_room].data[p.pos.y - 2][p.pos.x] != '#' && m[current_room].data[p.pos.y - 2][p.pos.x] != '1') {
               m[current_room].data[p.pos.y - 2][p.pos.x] = '*';
               m[current_room].data[p.pos.y - 1][p.pos.x] = ' ';
               p.pos.y--;
-            }
+            }   
           } else if (m[current_room].data[p.pos.y - 1][p.pos.x] == '1') {
-            if (p.pos.y > 1 && m[current_room].data[p.pos.y - 2][p.pos.x] != '#') {
+            if (p.pos.y > 1 && m[current_room].data[p.pos.y - 2][p.pos.x] != '#' && m[current_room].data[p.pos.y - 2][p.pos.x] != '*') {
               m[current_room].data[p.pos.y - 2][p.pos.x] = '1';
               m[current_room].data[p.pos.y - 1][p.pos.x] = ' ';
               p.pos.y--;
-            }          	
-          
-          }else {
+            }               
+          } else if (m[current_room].data[p.pos.y - 1][p.pos.x] != '#') {
             p.pos.y--;
-          }
+          }   
         }
+
+
+
         break;
       case KEY_DOWN:
         if (p.pos.y == ROOM_HEIGHT - 1) {
@@ -360,21 +363,25 @@ int main() {
 
         if (p.pos.y < ROOM_HEIGHT - 1 && (m[current_room].data[p.pos.y + 1][p.pos.x] != '#' || m[current_room].data[p.pos.y + 1][p.pos.x] != '1') && no_enemies) {
           if (m[current_room].data[p.pos.y + 1][p.pos.x] == '*') {
-            if (p.pos.y < ROOM_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#') {
+            if (p.pos.y < ROOM_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#' && m[current_room].data[p.pos.y + 2][p.pos.x] != '1') {
               m[current_room].data[p.pos.y + 2][p.pos.x] = '*';
               m[current_room].data[p.pos.y + 1][p.pos.x] = ' ';
               p.pos.y++;
             }
           } else if (m[current_room].data[p.pos.y + 1][p.pos.x] == '1') {
-          		if (p.pos.y < ROOM_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#') {
-              	m[current_room].data[p.pos.y + 2][p.pos.x] = '1';
-              	m[current_room].data[p.pos.y + 1][p.pos.x] = ' ';
-              	p.pos.y++;
-              }         
+            if (p.pos.y < ROOM_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#' && m[current_room].data[p.pos.y + 2][p.pos.x] != '*') {
+              m[current_room].data[p.pos.y + 2][p.pos.x] = '1';
+              m[current_room].data[p.pos.y + 1][p.pos.x] = ' ';
+              p.pos.y++;
+            }         
           } else {
             p.pos.y++;
           }
         } 
+
+
+
+
         break;
       case KEY_LEFT:
 
@@ -391,23 +398,32 @@ int main() {
           }
         }
 
-        if (p.pos.x > 0 && (m[current_room].data[p.pos.y][p.pos.x - 1] != '#' || m[current_room].data[p.pos.y][p.pos.x - 1] != '1' ) && no_enemies) {
+
+        if (p.pos.x > 0 && 
+            (m[current_room].data[p.pos.y][p.pos.x - 1] != '#' || m[current_room].data[p.pos.y][p.pos.x - 1] != '1') && 
+            no_enemies) {
           if (m[current_room].data[p.pos.y][p.pos.x - 1] == '*') {
-            if (p.pos.x > 1 && m[current_room].data[p.pos.y][p.pos.x - 2] != '#') {
+            if (p.pos.x > 1 && m[current_room].data[p.pos.y][p.pos.x - 2] != '#' &&
+                m[current_room].data[p.pos.y][p.pos.x - 2] != '1') {
               m[current_room].data[p.pos.y][p.pos.x - 2] = '*';
               m[current_room].data[p.pos.y][p.pos.x - 1] = ' ';
               p.pos.x--;
             }
           } else if (m[current_room].data[p.pos.y][p.pos.x - 1] == '1') {
-	          if (p.pos.x > 1 && m[current_room].data[p.pos.y][p.pos.x - 2] != '#') {
-    	          m[current_room].data[p.pos.y][p.pos.x - 2] = '1';
-    	          m[current_room].data[p.pos.y][p.pos.x - 1] = ' ';
-    	          p.pos.x--;
-    	      }
+            if (p.pos.x > 1 && m[current_room].data[p.pos.y][p.pos.x - 2] != '#') {
+              if (m[current_room].data[p.pos.y][p.pos.x - 2] != '*' && m[current_room].data[p.pos.y][p.pos.x - 2] != '1') {
+                m[current_room].data[p.pos.y][p.pos.x - 2] = '1';
+                m[current_room].data[p.pos.y][p.pos.x - 1] = ' ';
+                p.pos.x--;
+              }
+            }
           } else {
             p.pos.x--;
           }
         }
+
+
+
         break;
       case KEY_RIGHT:
         if (p.pos.x == ROOM_WIDTH - 1) {
@@ -423,23 +439,28 @@ int main() {
           }
         }
 
-        if (p.pos.x < ROOM_WIDTH - 1 && (m[current_room].data[p.pos.y][p.pos.x + 1] != '#' || m[current_room].data[p.pos.y][p.pos.x + 1] != '1') && no_enemies) {
+
+      if (p.pos.x < ROOM_WIDTH - 1 && (m[current_room].data[p.pos.y][p.pos.x + 1] != '#' || m[current_room].data[p.pos.y][p.pos.x + 1] != '1') && no_enemies) {
           if (m[current_room].data[p.pos.y][p.pos.x + 1] == '*') {
-            if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#') {
+            if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#' &&
+                m[current_room].data[p.pos.y][p.pos.x + 2] != '1') {
               m[current_room].data[p.pos.y][p.pos.x + 2] = '*';
               m[current_room].data[p.pos.y][p.pos.x + 1] = ' ';
               p.pos.x++;
             }
           } else if (m[current_room].data[p.pos.y][p.pos.x + 1] == '1') {
-              if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#') {
- 	             m[current_room].data[p.pos.y][p.pos.x + 2] = '1';
- 	             m[current_room].data[p.pos.y][p.pos.x + 1] = ' ';
- 	             p.pos.x++;     	
+            if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#') {
+              if (m[current_room].data[p.pos.y][p.pos.x + 2] != '*' && m[current_room].data[p.pos.y][p.pos.x + 2] != '1') {
+                m[current_room].data[p.pos.y][p.pos.x + 2] = '1';
+                m[current_room].data[p.pos.y][p.pos.x + 1] = ' ';
+                p.pos.x++;
               }
+            }
           } else {
             p.pos.x++;
           }
-        } 
+        }
+
         break;
       case 'q':
         endwin();
