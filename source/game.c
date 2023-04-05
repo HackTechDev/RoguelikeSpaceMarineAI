@@ -327,13 +327,13 @@ int main() {
 
         if (p.pos.y > 0 && (m[current_room].data[p.pos.y - 1][p.pos.x] != '#' || m[current_room].data[p.pos.y - 1][p.pos.x] != '1') && no_enemies) {
           if (m[current_room].data[p.pos.y - 1][p.pos.x] == '*') {
-            if (p.pos.y > 1 && m[current_room].data[p.pos.y - 2][p.pos.x] != '#' && m[current_room].data[p.pos.y - 2][p.pos.x] != '*') {
+            if (p.pos.y > 1 && m[current_room].data[p.pos.y - 2][p.pos.x] != '#') {
               m[current_room].data[p.pos.y - 2][p.pos.x] = '*';
               m[current_room].data[p.pos.y - 1][p.pos.x] = ' ';
               p.pos.y--;
             }
           } else if (m[current_room].data[p.pos.y - 1][p.pos.x] == '1') {
-            if (p.pos.y > 1 && m[current_room].data[p.pos.y - 2][p.pos.x] != '#' && m[current_room].data[p.pos.y - 2][p.pos.x] != '1') {
+            if (p.pos.y > 1 && m[current_room].data[p.pos.y - 2][p.pos.x] != '#') {
               m[current_room].data[p.pos.y - 2][p.pos.x] = '1';
               m[current_room].data[p.pos.y - 1][p.pos.x] = ' ';
               p.pos.y--;
@@ -360,13 +360,13 @@ int main() {
 
         if (p.pos.y < ROOM_HEIGHT - 1 && (m[current_room].data[p.pos.y + 1][p.pos.x] != '#' || m[current_room].data[p.pos.y + 1][p.pos.x] != '1') && no_enemies) {
           if (m[current_room].data[p.pos.y + 1][p.pos.x] == '*') {
-            if (p.pos.y < ROOM_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#' && m[current_room].data[p.pos.y + 2][p.pos.x] != '*') {
+            if (p.pos.y < ROOM_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#') {
               m[current_room].data[p.pos.y + 2][p.pos.x] = '*';
               m[current_room].data[p.pos.y + 1][p.pos.x] = ' ';
               p.pos.y++;
             }
           } else if (m[current_room].data[p.pos.y + 1][p.pos.x] == '1') {
-          		if (p.pos.y < ROOM_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#' && m[current_room].data[p.pos.y + 2][p.pos.x] != '1') {
+          		if (p.pos.y < ROOM_HEIGHT - 2 && m[current_room].data[p.pos.y + 2][p.pos.x] != '#') {
               	m[current_room].data[p.pos.y + 2][p.pos.x] = '1';
               	m[current_room].data[p.pos.y + 1][p.pos.x] = ' ';
               	p.pos.y++;
@@ -393,13 +393,13 @@ int main() {
 
         if (p.pos.x > 0 && (m[current_room].data[p.pos.y][p.pos.x - 1] != '#' || m[current_room].data[p.pos.y][p.pos.x - 1] != '1' ) && no_enemies) {
           if (m[current_room].data[p.pos.y][p.pos.x - 1] == '*') {
-            if (p.pos.x > 1 && m[current_room].data[p.pos.y][p.pos.x - 2] != '#' && m[current_room].data[p.pos.y][p.pos.x - 2] != '*') {
+            if (p.pos.x > 1 && m[current_room].data[p.pos.y][p.pos.x - 2] != '#') {
               m[current_room].data[p.pos.y][p.pos.x - 2] = '*';
               m[current_room].data[p.pos.y][p.pos.x - 1] = ' ';
               p.pos.x--;
             }
           } else if (m[current_room].data[p.pos.y][p.pos.x - 1] == '1') {
-	          if (p.pos.x > 1 && m[current_room].data[p.pos.y][p.pos.x - 2] != '#' && m[current_room].data[p.pos.y][p.pos.x - 2] != '1') {
+	          if (p.pos.x > 1 && m[current_room].data[p.pos.y][p.pos.x - 2] != '#') {
     	          m[current_room].data[p.pos.y][p.pos.x - 2] = '1';
     	          m[current_room].data[p.pos.y][p.pos.x - 1] = ' ';
     	          p.pos.x--;
@@ -425,13 +425,13 @@ int main() {
 
         if (p.pos.x < ROOM_WIDTH - 1 && (m[current_room].data[p.pos.y][p.pos.x + 1] != '#' || m[current_room].data[p.pos.y][p.pos.x + 1] != '1') && no_enemies) {
           if (m[current_room].data[p.pos.y][p.pos.x + 1] == '*') {
-            if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#' && m[current_room].data[p.pos.y][p.pos.x + 2] != '*') {
+            if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#') {
               m[current_room].data[p.pos.y][p.pos.x + 2] = '*';
               m[current_room].data[p.pos.y][p.pos.x + 1] = ' ';
               p.pos.x++;
             }
           } else if (m[current_room].data[p.pos.y][p.pos.x + 1] == '1') {
-              if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#' && m[current_room].data[p.pos.y][p.pos.x + 2] != '1') {
+              if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#') {
  	             m[current_room].data[p.pos.y][p.pos.x + 2] = '1';
  	             m[current_room].data[p.pos.y][p.pos.x + 1] = ' ';
  	             p.pos.x++;     	
