@@ -6,9 +6,11 @@
 #define ROOM_WIDTH 60
 #define ROOM_HEIGHT 20
 #define MAX_ROOM_SIZE 1024
-#define MAX_OBJECTS 10
 
+#define MAX_OBJECTS 10
+#define MAX_TARGETS 2
 #define MAX_ENEMIES 3
+
 #define PLAYER_HP 20
 #define ENEMY_HP 10
 #define ENEMY_DAMAGE 8
@@ -49,6 +51,12 @@ typedef struct {
   int damage;
   int room;
 } enemy;
+
+typedef struct {
+  position pos;
+  char symbol;
+  int room;
+} target;
 
 
 void load_room(const char* filename, room* m) {
@@ -100,6 +108,11 @@ void draw_player(WINDOW *game_win,player* p) {
 void draw_enemy(WINDOW *game_win,enemy* e) {
   mvwaddch(game_win, OFFSET_GAME_WIN_Y + e->pos.y, OFFSET_GAME_WIN_X + e->pos.x, e->symbol);
 }
+
+void draw_target(WINDOW *game_win, target* t) {
+  mvwaddch(game_win, OFFSET_GAME_WIN_Y + t->pos.y, OFFSET_GAME_WIN_X + t->pos.x, t->symbol);
+}
+
 
 
 void move_enemy(enemy* e, room* m) {
@@ -186,21 +199,35 @@ void init_enemies_from_file(const char* filename, enemy* e, int num_enemies) {
 }
 
 
+void init_targets_from_file(const char* filename, target* t, int num_targets) {
+  FILE* fp;
+  fp = fopen(filename, "r");
+  if (fp == NULL) {
+    printf("Failed to open file: %s\n", filename);
+    exit(1);
+  }
+  for (int i = 0; i < num_targets; i++) {
+    fscanf(fp, "%d %d %c %d", &t[i].pos.x, &t[i].pos.y, &t[i].symbol, &t[i].room);
+  }
+  fclose(fp);
+}
+
+
 void clear_window(WINDOW *win, int y, int x) {
-    int row, col;
-    for (row = 0; row < y; row++) {
-      for (col = 0; col < x; col++) {
-          mvwaddch(win, OFFSET_GAME_WIN_Y + row, OFFSET_GAME_WIN_Y + col, ' ');
-      }
+  int row, col;
+  for (row = 0; row < y; row++) {
+    for (col = 0; col < x; col++) {
+      mvwaddch(win, OFFSET_GAME_WIN_Y + row, OFFSET_GAME_WIN_Y + col, ' ');
     }
-    wrefresh(win);
+  }
+  wrefresh(win);
 }
 
 
 int main() {
   WINDOW *mainwin, *game_win, *info_win, *side_win;
 
-  
+
   int map_width = 60, map_height = 20;
   int char_x = map_width / 2, char_y = map_height / 2;
 
@@ -208,7 +235,7 @@ int main() {
     fprintf(stderr, "Error initialising ncurses.\n");
     exit(EXIT_FAILURE);
   }
-  
+
   raw();
   keypad(mainwin, TRUE);
   noecho();
@@ -217,14 +244,14 @@ int main() {
 
   game_win = subwin(mainwin, map_height+2, map_width+2, 0, 0);
   box(game_win, 0, 0);
-  
+
   info_win = subwin(mainwin, 6, map_width+2, map_height+2, 0);
   box(info_win, 0, 0);
-  
+
   side_win = subwin(mainwin, map_height+8, 30, 0, map_width+3);
   box(side_win, 0, 0);
-  
-    
+
+
 
 
   player p;
@@ -251,7 +278,7 @@ int main() {
   int choice = 0;
   while (1) {
     wrefresh(info_win);
-    
+
     mvwprintw(info_win, 1, 1, "Roguelike SpaceMarine");
     mvwprintw(info_win, 2, 1, "1. A la guerre !!");
     mvwprintw(info_win, 3, 1, "2. Quitter");
@@ -266,12 +293,13 @@ int main() {
       return 0;
     }
   }
- 
+
   clear_window(info_win, 3, 50);
   wrefresh(info_win);
- 
+
   room m[9];
   enemy e[3];
+  target t[2];
 
   load_room("rooms/room0.txt", &m[0]);
   load_room("rooms/room1.txt", &m[1]);
@@ -286,6 +314,10 @@ int main() {
   // Initialize enemies
   init_enemies_from_file("enemies/enemies.txt", e, MAX_ENEMIES);
 
+  // Initialize targets
+  init_targets_from_file("targets/targets.txt", t, MAX_TARGETS);
+
+
   int current_room = p.room;
 
   while (1) {
@@ -296,8 +328,8 @@ int main() {
 
     wrefresh(info_win);
 
+
     draw_room(game_win, &m[current_room]);
-    draw_player(game_win, &p);
 
 
     for (int i = 0; i < MAX_ENEMIES; i++) {
@@ -305,6 +337,15 @@ int main() {
         draw_enemy(game_win, &e[i]);
       }
     }
+
+
+    for (int i = 0; i < MAX_TARGETS; i++) {
+      if (t[i].room == current_room) {
+        draw_target(game_win, &t[i]);
+      }
+    }
+
+    draw_player(game_win, &p);
 
     wrefresh(game_win);
 
@@ -442,6 +483,7 @@ int main() {
     }
 
   }
+
 
   wrefresh(game_win);
   wrefresh(side_win);
