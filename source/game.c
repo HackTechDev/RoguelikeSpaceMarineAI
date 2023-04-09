@@ -10,6 +10,7 @@
 #define MAX_OBJECTS 10
 #define MAX_TARGETS 2
 #define MAX_ENEMIES 3
+#define MAX_CRATES 2
 
 #define PLAYER_HP 20
 #define ENEMY_HP 10
@@ -57,6 +58,13 @@ typedef struct {
   char symbol;
   int room;
 } target;
+
+
+typedef struct {
+  position pos;
+  char symbol;
+  int room;
+} crate;
 
 
 void load_room(const char* filename, room* m) {
@@ -111,6 +119,10 @@ void draw_enemy(WINDOW *game_win,enemy* e) {
 
 void draw_target(WINDOW *game_win, target* t) {
   mvwaddch(game_win, OFFSET_GAME_WIN_Y + t->pos.y, OFFSET_GAME_WIN_X + t->pos.x, t->symbol);
+}
+
+void draw_crate(WINDOW *game_win, crate* c) {
+  mvwaddch(game_win, OFFSET_GAME_WIN_Y + c->pos.y, OFFSET_GAME_WIN_X + c->pos.x, c->symbol);
 }
 
 
@@ -213,6 +225,20 @@ void init_targets_from_file(const char* filename, target* t, int num_targets) {
 }
 
 
+void init_crates_from_file(const char* filename, crate* c, int num_crates) {
+  FILE* fp;
+  fp = fopen(filename, "r");
+  if (fp == NULL) {
+    printf("Failed to open file: %s\n", filename);
+    exit(1);
+  }
+  for (int i = 0; i < num_crates; i++) {
+    fscanf(fp, "%d %d %c %d", &c[i].pos.x, &c[i].pos.y, &c[i].symbol, &c[i].room);
+  }
+  fclose(fp);
+}
+
+
 void clear_window(WINDOW *win, int y, int x) {
   int row, col;
   for (row = 0; row < y; row++) {
@@ -300,6 +326,7 @@ int main() {
   room m[9];
   enemy e[3];
   target t[2];
+  crate c[2];
 
   load_room("rooms/room0.txt", &m[0]);
   load_room("rooms/room1.txt", &m[1]);
@@ -316,6 +343,7 @@ int main() {
 
   // Initialize targets
   init_targets_from_file("targets/targets.txt", t, MAX_TARGETS);
+  init_crates_from_file("crates/crates.txt", c, MAX_CRATES);
 
 
   int current_room = p.room;
@@ -344,6 +372,13 @@ int main() {
         draw_target(game_win, &t[i]);
       }
     }
+
+    for (int i = 0; i < MAX_CRATES; i++) {
+      if (c[i].room == current_room) {
+        draw_crate(game_win, &c[i]);
+      }
+    }
+
 
     draw_player(game_win, &p);
 
