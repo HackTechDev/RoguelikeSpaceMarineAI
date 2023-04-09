@@ -435,8 +435,8 @@ int main() {
         combat(game_win, &p, &e[i]);
         if (e[i].hp <= 0) {
           // Enemy display outside the screen
-          e[i].pos.x = -2;
-          e[i].pos.y = -2;
+          e[i].pos.x = -999;
+          e[i].pos.y = -999;
         }
       }   
     }
