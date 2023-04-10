@@ -278,9 +278,6 @@ int main() {
   side_win = subwin(mainwin, map_height+8, 30, 0, map_width+3);
   box(side_win, 0, 0);
 
-
-
-
   player p;
   char name[50];
 
@@ -380,11 +377,9 @@ int main() {
       }
     }
 
-
     draw_player(game_win, &p);
 
     wrefresh(game_win);
-
 
     int ch = getch();
     switch (ch) {
@@ -402,11 +397,6 @@ int main() {
           }
         }
 
-
-
-
-
-
         can_go = 1; // We don't know if it is okay or not
         if (p.pos.y > 0) { // Is in the map
           if (m[current_room].data[p.pos.y - 1][p.pos.x] == '#' || no_enemies == false) { // There are a wall and enemies just nearby
@@ -418,29 +408,33 @@ int main() {
                   if (p.pos.y - 1 == c[i].pos.y) {
                     if (m[current_room].data[p.pos.y - 2 ][p.pos.x] == '#') { // There is a crate and a wall : H#
                       can_go = 0;
-                    } else {
-                      if (p.pos.y == 1) {
+                    } 
+
+                    for (int j = 0; j < MAX_CRATES; j++) { // There is a crate and another crate : HH
+                      if (p.pos.x == c[j].pos.x && p.pos.y - 2 == c[j].pos.y) {
                         can_go = 0;
-                      } else {
-                        c[i].pos.y = c[i].pos.y - 1;
-                      }                      
+                        break;
+                      }
                     }
+
+                    if (p.pos.y == 1) { // The crate is exactly on the edge/limit of the map
+                      can_go = 0;
+                    } 
+
+                    if (can_go == 1) {
+                      c[i].pos.y = c[i].pos.y - 1;           
+                    }  
+
                   }
                 } 
               }
-          } // Check all crates
-        } // Wall detection        
-      } // Map border
+            } // Check all crates
+          } // Wall detection        
+        } // Map border
 
-      if (can_go == 1) {
-        p.pos.y--;
-      }
-
-
-
-
-
-
+        if (can_go == 1) {
+          p.pos.y--;
+        }
 
         break;
       case KEY_DOWN:
@@ -457,10 +451,6 @@ int main() {
           }
         }
 
-
-
-
-
         can_go = 1; // We don't know if it is okay or not
         if (p.pos.y < ROOM_HEIGHT - 1) { // Is in the map
           if (m[current_room].data[p.pos.y + 1][p.pos.x] == '#' || no_enemies == false) { // There are a wall and enemies just nearby
@@ -473,8 +463,6 @@ int main() {
                     if (m[current_room].data[p.pos.y + 2][p.pos.x] == '#' ) { // There is a crate and a wall : H#
                       can_go = 0;
                     } 
-                    
-                    
 
                     for (int j = 0; j < MAX_CRATES; j++) { // There is a crate and another crate : HH
                       if (p.pos.x == c[j].pos.x && p.pos.y + 2 == c[j].pos.y) {
@@ -482,9 +470,9 @@ int main() {
                         break;
                       }
                     }
-                    
+
                     if (p.pos.y == ROOM_HEIGHT - 2) { // The crate is exactly on the edge/limit of the map
-                        can_go = 0;
+                      can_go = 0;
                     } 
 
 
@@ -492,24 +480,16 @@ int main() {
                       c[i].pos.y = c[i].pos.y + 1;               
                     }  
 
-                    
-
-
-
-                    
                   }
                 } 
               }
-          } // Check all crates
-        } // Wall detection        
-      } // Map border
+            } // Check all crates
+          } // Wall detection        
+        } // Map border
 
-      if (can_go == 1) {
-        p.pos.y++;
-      }
-
-
-
+        if (can_go == 1) {
+          p.pos.y++;
+        }
 
         break;
       case KEY_LEFT:
@@ -527,8 +507,6 @@ int main() {
           }
         }
 
-
-
         can_go = 1; // We don't know if it is okay or not
         if (p.pos.x > 0) { // Is in the map
           if (m[current_room].data[p.pos.y][p.pos.x - 1] == '#' || no_enemies == false) { // There are a wall and enemies just nearby
@@ -541,36 +519,32 @@ int main() {
                     if (m[current_room].data[p.pos.y][p.pos.x - 2] == '#') { // There is a crate and a wall : H#
                       can_go = 0;
                     } 
-                    
+
                     for (int j = 0; j < MAX_CRATES; j++) { // There is a crate and another crate : HH
                       if (p.pos.y == c[j].pos.y && p.pos.x - 2 == c[j].pos.x) {
                         can_go = 0;
                         break;
                       }
                     }
-                    
-                    if (p.pos.x == 1) { // The crate is exactly on the edge/limit of the map
-                        can_go = 0;
-                    } 
 
+                    if (p.pos.x == 1) { // The crate is exactly on the edge/limit of the map
+                      can_go = 0;
+                    } 
 
                     if (can_go == 1) {
                       c[i].pos.x = c[i].pos.x - 1;                          
                     }  
 
-                 
-                    
                   }
                 } 
               }
-          } // Check all crates
-        } // Wall detection        
-      } // Map border
+            } // Check all crates
+          } // Wall detection        
+        } // Map border
 
-      if (can_go == 1) {
-        p.pos.x--;
-      }
-
+        if (can_go == 1) {
+          p.pos.x--;
+        }
 
         break;
       case KEY_RIGHT:
@@ -586,7 +560,6 @@ int main() {
             break; 
           }
         }
-
 
         can_go = 1; // We don't know if it is okay or not
         if (p.pos.x < ROOM_WIDTH - 1) { // Is in the map
@@ -607,9 +580,9 @@ int main() {
                         break;
                       }
                     }
-                    
+
                     if (p.pos.x == ROOM_WIDTH - 2) { // The crate is exactly on the edge/limit of the map
-                        can_go = 0;
+                      can_go = 0;
                     } 
 
 
@@ -617,46 +590,45 @@ int main() {
                       c[i].pos.x = c[i].pos.x + 1;                        
                     }  
 
-                                     
                   }
                 } 
               }
-          } // Check all crates
-        } // Wall detection        
-      } // Map border
+            } // Check all crates
+          } // Wall detection        
+        } // Map border
 
-      if (can_go == 1) {
-        p.pos.x++;
-      }
+        if (can_go == 1) {
+          p.pos.x++;
+        }
 
-    break;
-    case 'q':
-    endwin();
-    exit(0);
-    break;
-  }
-
-
-  for (int i = 0; i < MAX_ENEMIES; i++) {
-    if (e[i].room == current_room) {
-      move_enemy(&e[i], &m[current_room]);
+        break;
+      case 'q':
+        endwin();
+        exit(0);
+        break;
     }
-    if (check_for_enemy(&p, &e[i], current_room)) {
-      combat(game_win, &p, &e[i]);
-      if (e[i].hp <= 0) {
-        // Enemy display outside the screen
-        e[i].pos.x = -999;
-        e[i].pos.y = -999;
+
+
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+      if (e[i].room == current_room) {
+        move_enemy(&e[i], &m[current_room]);
       }
-    }   
+      if (check_for_enemy(&p, &e[i], current_room)) {
+        combat(game_win, &p, &e[i]);
+        if (e[i].hp <= 0) {
+          // Enemy display outside the screen
+          e[i].pos.x = -999;
+          e[i].pos.y = -999;
+        }
+      }   
+    }
+
   }
 
-}
 
-
-wrefresh(game_win);
-wrefresh(side_win);
-wrefresh(info_win);
-endwin();
-return 0;
+  wrefresh(game_win);
+  wrefresh(side_win);
+  wrefresh(info_win);
+  endwin();
+  return 0;
 }
