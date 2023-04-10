@@ -483,46 +483,61 @@ int main() {
           }
         }
 
-        if (p.pos.x < ROOM_WIDTH - 1 && m[current_room].data[p.pos.y][p.pos.x + 1] != '#' && no_enemies) {
-          if (m[current_room].data[p.pos.y][p.pos.x + 1] == '*') {
-            if (p.pos.x < ROOM_WIDTH - 2 && m[current_room].data[p.pos.y][p.pos.x + 2] != '#' && m[current_room].data[p.pos.y][p.pos.x + 2] != '*') {
-              m[current_room].data[p.pos.y][p.pos.x + 2] = '*';
-              m[current_room].data[p.pos.y][p.pos.x + 1] = ' ';
-              p.pos.x++;
-            }
-          }
-          else {
-            p.pos.x++;
-          }
-        } 
-        break;
-      case 'q':
-        endwin();
-        exit(0);
-        break;
-    }
 
+        int can_go = 1; // We don't know if it is okay or not
+        if (p.pos.x < ROOM_WIDTH - 1) { // Is in the map
+          if (m[current_room].data[p.pos.y][p.pos.x + 1] == '#' || no_enemies == false) { // There are a wall and enemies just nearby
+            can_go = 0;
+          } else { // There is not a wall or enemie
+            for (int i = 0; i < MAX_CRATES; i++) { // Test all crates
+              if (c[i].room = current_room) { // The create is in the same room
+                if (p.pos.y == c[i].pos.y) {
+                  if (p.pos.x + 1 == c[i].pos.x) {
+                    if (m[current_room].data[p.pos.y][p.pos.x + 2] == '#') {
+                      can_go = 0;
+                    } else {
+                      c[i].pos.x = c[i].pos.x + 1;                        
+                      //can_go =1;
+                    }
+                  }
+                } 
+              }
+          } // Check all crates
+        } // Wall detection        
+      } // Map border
 
-    for (int i = 0; i < MAX_ENEMIES; i++) {
-      if (e[i].room == current_room) {
-        move_enemy(&e[i], &m[current_room]);
+      if (can_go == 1) {
+        p.pos.x++;
       }
-      if (check_for_enemy(&p, &e[i], current_room)) {
-        combat(game_win, &p, &e[i]);
-        if (e[i].hp <= 0) {
-          // Enemy display outside the screen
-          e[i].pos.x = -999;
-          e[i].pos.y = -999;
-        }
-      }   
-    }
 
+    break;
+    case 'q':
+    endwin();
+    exit(0);
+    break;
   }
 
 
-  wrefresh(game_win);
-  wrefresh(side_win);
-  wrefresh(info_win);
-  endwin();
-  return 0;
+  for (int i = 0; i < MAX_ENEMIES; i++) {
+    if (e[i].room == current_room) {
+      move_enemy(&e[i], &m[current_room]);
+    }
+    if (check_for_enemy(&p, &e[i], current_room)) {
+      combat(game_win, &p, &e[i]);
+      if (e[i].hp <= 0) {
+        // Enemy display outside the screen
+        e[i].pos.x = -999;
+        e[i].pos.y = -999;
+      }
+    }   
+  }
+
+}
+
+
+wrefresh(game_win);
+wrefresh(side_win);
+wrefresh(info_win);
+endwin();
+return 0;
 }
