@@ -419,7 +419,11 @@ int main() {
                     if (m[current_room].data[p.pos.y - 2 ][p.pos.x] == '#') {
                       can_go = 0;
                     } else {
-                      c[i].pos.y = c[i].pos.y - 1;                        
+                      if (p.pos.y == 1) {
+                        can_go = 0;
+                      } else {
+                        c[i].pos.y = c[i].pos.y - 1;
+                      }                      
                     }
                   }
                 } 
@@ -466,10 +470,14 @@ int main() {
               if (c[i].room == current_room) { // The create is in the same room
                 if (p.pos.x == c[i].pos.x) {
                   if (p.pos.y + 1 == c[i].pos.y) {
-                    if (m[current_room].data[p.pos.y + 2 ][p.pos.x] == '#') {
+                    if (m[current_room].data[p.pos.y + 2][p.pos.x] == '#' ) {
                       can_go = 0;
                     } else {
-                      c[i].pos.y = c[i].pos.y + 1;                        
+                      if (p.pos.y == ROOM_HEIGHT - 2) {
+                        can_go = 0;
+                      } else {
+                        c[i].pos.y = c[i].pos.y + 1;
+                      }                        
                     }
                   }
                 } 
