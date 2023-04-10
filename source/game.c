@@ -563,20 +563,30 @@ int main() {
             can_go = 0;
           } else { // There is not a wall or enemie
             for (int i = 0; i < MAX_CRATES; i++) { // Test all crates
-              if (c[i].room == current_room) { // The create is in the same room
+              if (c[i].room == current_room) { // The crate is in the same room
                 if (p.pos.y == c[i].pos.y) {
                   if (p.pos.x + 1 == c[i].pos.x) {
-                    if (m[current_room].data[p.pos.y][p.pos.x + 2] == '#') {
+                    if (m[current_room].data[p.pos.y][p.pos.x + 2] == '#') { // There is a crate and a wall : H#
                       can_go = 0;
-                    } else {
-                      if (p.pos.x == ROOM_WIDTH - 2) {
+                    } 
+
+                    for (int j = 0; j < MAX_CRATES; j++) { // There is a crate and another crate : HH
+                      if (p.pos.x + 2 == c[j].pos.x) {
                         can_go = 0;
-                      } else {
-                        c[i].pos.x = c[i].pos.x + 1;                        
-                      }  
+                        break;
+                      }
+                    }
+                    
+                    if (p.pos.x == ROOM_WIDTH - 2) { // The crate is exactly on the edge/limit of the map
+                        can_go = 0;
+                    } 
+
+
+                    if (can_go == 1) {
+                      c[i].pos.x = c[i].pos.x + 1;                        
+                    }  
 
                                      
-                    }
                   }
                 } 
               }
