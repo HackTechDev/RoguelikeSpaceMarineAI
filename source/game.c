@@ -523,7 +523,11 @@ int main() {
                     if (m[current_room].data[p.pos.y][p.pos.x - 2] == '#') {
                       can_go = 0;
                     } else {
-                      c[i].pos.x = c[i].pos.x - 1;                        
+                      if (p.pos.x == 1) {
+                        can_go = 0;
+                      } else {
+                        c[i].pos.x = c[i].pos.x - 1;                        
+                      }        
                     }
                   }
                 } 
@@ -565,7 +569,13 @@ int main() {
                     if (m[current_room].data[p.pos.y][p.pos.x + 2] == '#') {
                       can_go = 0;
                     } else {
-                      c[i].pos.x = c[i].pos.x + 1;                        
+                      if (p.pos.x == ROOM_WIDTH - 2) {
+                        can_go = 0;
+                      } else {
+                        c[i].pos.x = c[i].pos.x + 1;                        
+                      }  
+
+                                     
                     }
                   }
                 } 
