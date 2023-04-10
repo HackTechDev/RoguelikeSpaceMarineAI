@@ -253,6 +253,7 @@ void clear_window(WINDOW *win, int y, int x) {
 int main() {
   WINDOW *mainwin, *game_win, *info_win, *side_win;
 
+  int can_go = 0;
 
   int map_width = 60, map_height = 20;
   int char_x = map_width / 2, char_y = map_height / 2;
@@ -456,18 +457,34 @@ int main() {
           }
         }
 
-        if (p.pos.x > 0 && m[current_room].data[p.pos.y][p.pos.x - 1] != '#' && no_enemies) {
-          if (m[current_room].data[p.pos.y][p.pos.x - 1] == '*') {
-            if (p.pos.x > 1 && m[current_room].data[p.pos.y][p.pos.x - 2] != '#' && m[current_room].data[p.pos.y][p.pos.x - 2] != '*') {
-              m[current_room].data[p.pos.y][p.pos.x - 2] = '*';
-              m[current_room].data[p.pos.y][p.pos.x - 1] = ' ';
-              p.pos.x--;
-            }
-          }
-          else {
-            p.pos.x--;
-          }
-        }
+
+
+        can_go = 1; // We don't know if it is okay or not
+        if (p.pos.x > 0) { // Is in the map
+          if (m[current_room].data[p.pos.y][p.pos.x - 1] == '#' || no_enemies == false) { // There are a wall and enemies just nearby
+            can_go = 0;
+          } else { // There is not a wall or enemie
+            for (int i = 0; i < MAX_CRATES; i++) { // Test all crates
+              if (c[i].room = current_room) { // The create is in the same room
+                if (p.pos.y == c[i].pos.y) {
+                  if (p.pos.x -1 == c[i].pos.x) {
+                    if (m[current_room].data[p.pos.y][p.pos.x - 2] == '#') {
+                      can_go = 0;
+                    } else {
+                      c[i].pos.x = c[i].pos.x - 1;                        
+                    }
+                  }
+                } 
+              }
+          } // Check all crates
+        } // Wall detection        
+      } // Map border
+
+      if (can_go == 1) {
+        p.pos.x--;
+      }
+
+
         break;
       case KEY_RIGHT:
         if (p.pos.x == ROOM_WIDTH - 1) {
@@ -484,7 +501,7 @@ int main() {
         }
 
 
-        int can_go = 1; // We don't know if it is okay or not
+        can_go = 1; // We don't know if it is okay or not
         if (p.pos.x < ROOM_WIDTH - 1) { // Is in the map
           if (m[current_room].data[p.pos.y][p.pos.x + 1] == '#' || no_enemies == false) { // There are a wall and enemies just nearby
             can_go = 0;
@@ -497,7 +514,6 @@ int main() {
                       can_go = 0;
                     } else {
                       c[i].pos.x = c[i].pos.x + 1;                        
-                      //can_go =1;
                     }
                   }
                 } 
