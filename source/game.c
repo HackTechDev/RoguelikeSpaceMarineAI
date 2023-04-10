@@ -602,6 +602,14 @@ int main() {
         }
 
         break;
+
+      case 'c' : 
+        mvwprintw(info_win, 4, 1, "Check");
+
+        wrefresh(info_win);
+       
+        break;
+
       case 'q':
         endwin();
         exit(0);
