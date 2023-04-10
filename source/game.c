@@ -416,7 +416,7 @@ int main() {
               if (c[i].room == current_room) { // The create is in the same room
                 if (p.pos.x == c[i].pos.x) {
                   if (p.pos.y - 1 == c[i].pos.y) {
-                    if (m[current_room].data[p.pos.y - 2 ][p.pos.x] == '#') {
+                    if (m[current_room].data[p.pos.y - 2 ][p.pos.x] == '#') { // There is a crate and a wall : H#
                       can_go = 0;
                     } else {
                       if (p.pos.y == 1) {
@@ -470,7 +470,7 @@ int main() {
               if (c[i].room == current_room) { // The create is in the same room
                 if (p.pos.x == c[i].pos.x) {
                   if (p.pos.y + 1 == c[i].pos.y) {
-                    if (m[current_room].data[p.pos.y + 2][p.pos.x] == '#' ) {
+                    if (m[current_room].data[p.pos.y + 2][p.pos.x] == '#' ) { // There is a crate and a wall : H#
                       can_go = 0;
                     } else {
                       if (p.pos.y == ROOM_HEIGHT - 2) {
@@ -520,7 +520,7 @@ int main() {
               if (c[i].room == current_room) { // The create is in the same room
                 if (p.pos.y == c[i].pos.y) {
                   if (p.pos.x -1 == c[i].pos.x) {
-                    if (m[current_room].data[p.pos.y][p.pos.x - 2] == '#') {
+                    if (m[current_room].data[p.pos.y][p.pos.x - 2] == '#') { // There is a crate and a wall : H#
                       can_go = 0;
                     } else {
                       if (p.pos.x == 1) {
