@@ -607,9 +607,27 @@ int main() {
 
       case 'c' : 
         mvwprintw(info_win, 4, 1, "Check");
-
         wrefresh(info_win);
-       
+
+        int num_win = 2;
+        int num_match = 0;
+
+        for (int i = 0; i < MAX_TARGETS; i++) {
+          for (int j = 0; j < MAX_CRATES; j++) {
+            //printf("%d %d %d %d %d %d %d %d\n", i, j, t[i].room, c[j].room, t[i].pos.x, c[j].pos.x, t[i].pos.y, c[j].pos.y);
+            if ( t[i].room == c[j].room && t[i].pos.x == c[j].pos.x && t[i].pos.y == c[j].pos.y) {
+              num_match++;
+              mvwprintw(info_win, 4, 1, "Match");
+              wrefresh(info_win);
+            }
+          }
+        }
+
+        if (num_match == num_win) {
+          mvwprintw(info_win, 4, 1, "Unblock");
+          wrefresh(info_win);
+        }
+
         break;
 
       case 'q':
