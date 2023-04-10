@@ -472,13 +472,31 @@ int main() {
                   if (p.pos.y + 1 == c[i].pos.y) {
                     if (m[current_room].data[p.pos.y + 2][p.pos.x] == '#' ) { // There is a crate and a wall : H#
                       can_go = 0;
-                    } else {
-                      if (p.pos.y == ROOM_HEIGHT - 2) {
+                    } 
+                    
+                    
+
+                    for (int j = 0; j < MAX_CRATES; j++) { // There is a crate and another crate : HH
+                      if (p.pos.x == c[j].pos.x && p.pos.y + 2 == c[j].pos.y) {
                         can_go = 0;
-                      } else {
-                        c[i].pos.y = c[i].pos.y + 1;
-                      }                        
+                        break;
+                      }
                     }
+                    
+                    if (p.pos.y == ROOM_HEIGHT - 2) { // The crate is exactly on the edge/limit of the map
+                        can_go = 0;
+                    } 
+
+
+                    if (can_go == 1) {
+                      c[i].pos.y = c[i].pos.y + 1;               
+                    }  
+
+                    
+
+
+
+                    
                   }
                 } 
               }
@@ -540,13 +558,7 @@ int main() {
                       c[i].pos.x = c[i].pos.x - 1;                          
                     }  
 
-                    
-                      /*else {
-                      if (p.pos.x == 1) {
-                        can_go = 0;
-                      } else {
-                        c[i].pos.x = c[i].pos.x - 1;                        
-                      } */       
+                 
                     
                   }
                 } 
