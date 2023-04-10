@@ -57,6 +57,7 @@ typedef struct {
   position pos;
   char symbol;
   int room;
+  char name[20];
 } target;
 
 
@@ -64,6 +65,7 @@ typedef struct {
   position pos;
   char symbol;
   int room;
+  char name[20];
 } crate;
 
 
@@ -219,7 +221,7 @@ void init_targets_from_file(const char* filename, target* t, int num_targets) {
     exit(1);
   }
   for (int i = 0; i < num_targets; i++) {
-    fscanf(fp, "%d %d %c %d", &t[i].pos.x, &t[i].pos.y, &t[i].symbol, &t[i].room);
+    fscanf(fp, "%d %d %c %d %s", &t[i].pos.x, &t[i].pos.y, &t[i].symbol, &t[i].room, t[i].name);
   }
   fclose(fp);
 }
@@ -233,7 +235,7 @@ void init_crates_from_file(const char* filename, crate* c, int num_crates) {
     exit(1);
   }
   for (int i = 0; i < num_crates; i++) {
-    fscanf(fp, "%d %d %c %d", &c[i].pos.x, &c[i].pos.y, &c[i].symbol, &c[i].room);
+    fscanf(fp, "%d %d %c %d %s", &c[i].pos.x, &c[i].pos.y, &c[i].symbol, &c[i].room, c[i].name);
   }
   fclose(fp);
 }
